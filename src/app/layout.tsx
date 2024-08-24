@@ -1,10 +1,12 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 
-import { ClerkProvider } from "@clerk/nextjs";
-import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+
+import { cn } from "@/lib/utils";
+import { ClerkProvider } from "@clerk/nextjs";
+import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Noter",
@@ -25,6 +27,7 @@ export default function RootLayout({
             inter.variable
           )}
         >
+          <Navbar />
           {children}
         </body>
       </html>
