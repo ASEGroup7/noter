@@ -32,7 +32,7 @@ export default function Navbar() {
     <div className="flex justify-center border-b border-gray-100">
       <div className="h-[60px] px-[5%] flex gap-4 items-center w-screen">
 
-        <Image src="/Logo.png" alt="Noter logo" height={60} width={90} />
+        <Image priority src="/Logo.png" alt="Noter logo" height={60} width={90} />
         <Input placeholder="Search notes, topics, users ...." />
 
         <SignedIn>

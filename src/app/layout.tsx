@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
+import { ConvexClientProvider } from "@/components/providers/ConvexClientProvider";
 
 export const metadata: Metadata = {
   title: "Noter",
@@ -28,7 +29,7 @@ export default function RootLayout({
           )}
         >
           <Navbar />
-          {children}
+          <ConvexClientProvider>{children}</ConvexClientProvider>
         </body>
       </html>
     </ClerkProvider>
