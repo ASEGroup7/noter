@@ -79,7 +79,9 @@ function TagsSection({ onSelectedTagsChange } : { onSelectedTagsChange: (tags: s
 function NotesSection({ selectedTags } : { selectedTags : string[] }) {
 
   const router = useRouter();
+
   const [ nameFilter, setNameFilter ] = useState("");
+  const [ fileUploadComplete, setFileUploadComplete ] = useState(false);
 
   const debouncedNameFilter = useDebouncedCallback(setNameFilter, 300);
 
@@ -117,14 +119,16 @@ function NotesSection({ selectedTags } : { selectedTags : string[] }) {
               <DialogDescription>Drag and drop your files here. Click to upload.</DialogDescription>
             </DialogHeader>
             <UploadDropzone 
+              disabled={fileUploadComplete}
               endpoint="fileUploader"
               className="
                 ut-label:text-primary
                 ut-button:bg-primary
                 ut-allowed-content:uppercase
               "
-              onClientUploadComplete={(res) => {
-                const newNoteId = createNewNote({ fileUrl: res[0].url, fileId: res[0].key })
+              onClientUploadComplete={async (res) => {
+                setFileUploadComplete(true);
+                const newNoteId = await createNewNote({ fileUrl: res[0].url, fileId: res[0].key })
                 router.push(`/notes/upload/${newNoteId}`);
               }}
             />

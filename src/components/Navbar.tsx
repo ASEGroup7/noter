@@ -1,7 +1,8 @@
 "use client"
 
 import Image from "next/image";
-import { use, useState } from "react";
+import Link from "next/link";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { Input } from "@/components/ui/input";
@@ -23,7 +24,7 @@ const navLinks: NavLinkProps[] = [
   { title: "Contact", href: "#" },
 ];
 
-export default function Navbar() {
+export function Navbar() {
   const user = useUser(); 
   const router = useRouter();
   const [ isNavOpen, setIsNavOpen ] = useState(false);
@@ -32,7 +33,10 @@ export default function Navbar() {
     <div className="flex justify-center border-b border-gray-100">
       <div className="h-[60px] px-[5%] flex gap-4 items-center w-screen">
 
-        <Image priority src="/Logo.png" alt="Noter logo" height={60} width={90} />
+        <Link href="/notes">
+          <Image priority src="/Logo.png" alt="Noter logo" height={60} width={90} />
+        </Link>
+
         <Input placeholder="Search notes, topics, users ...." />
 
         <SignedIn>
@@ -52,8 +56,13 @@ export default function Navbar() {
           </SheetTrigger>
           <SheetContent side="left">
             <SheetHeader>
-              <Image src="/Logo.png" alt="Noter logo" height={60} width={90} />
+              <Link href="/notes" onClick={() => setIsNavOpen(false)}>
+                <Image priority src="/Logo.png" alt="Noter logo" height={60} width={90} />
+              </Link>
             </SheetHeader>
+            <div className="grid grid-cols-1 gap-4 mt-4">
+              
+            </div>
           </SheetContent>
         </Sheet>
       </div>

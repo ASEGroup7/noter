@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation } from "../_generated/server";
 import { notesTableSchema } from "../schema";
+import { Id } from "../_generated/dataModel";
 
 export const create = mutation({
   args: {
@@ -24,13 +25,16 @@ export const create = mutation({
 
 export const update = mutation({
   args: {
+    id: v.string(),
     title: v.optional(v.string()),
     description: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
     stars: v.optional(v.float64()),
   }, 
   handler: async (ctx, args) => {
-    
-    const updatedNote = ctx.db.patch("notes")
+    const { id, ...data } = args;
+    await ctx.db.patch(args.id as Id<"notes">, {
+      ...data
+    })
   }
 })

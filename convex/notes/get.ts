@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { query } from "../_generated/server";
 import { paginationOptsValidator } from "convex/server";
+import { Id } from "../_generated/dataModel";
 
 export const list = query({
   args: { 
@@ -27,5 +28,15 @@ export const list = query({
 
     results.page = results.page.filter(note => args.tags?.some(tag => note.tags.includes(tag)));
     return results;
+  }
+})
+
+export const id = query({
+  args: {
+    id: v.string(),
+  },
+  handler: async (ctx, args) => {
+    if(!ctx.db.normalizeId("notes", args.id)) return null;
+    return await ctx.db.get(args.id as Id<"notes">);
   }
 })
