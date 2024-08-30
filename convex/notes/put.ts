@@ -32,9 +32,12 @@ export const update = mutation({
     stars: v.optional(v.float64()),
   }, 
   handler: async (ctx, args) => {
-    const { id, ...data } = args;
-    await ctx.db.patch(args.id as Id<"notes">, {
-      ...data
+    const { id, title, description, tags, stars } = args;
+    await ctx.db.patch(id as Id<"notes">, {
+      ...(title !== undefined && { title }),
+      ...(description !== undefined && { description }),
+      ...(tags !== undefined && { tags }),
+      ...(stars !== undefined && { stars }),
     })
   }
 })
