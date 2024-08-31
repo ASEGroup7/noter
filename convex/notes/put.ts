@@ -15,6 +15,7 @@ export const create = mutation({
       description: "",
       fulltext: "",
       stars: 0,
+      downloads: 0,
       tags: [],
       fileUrl: args.fileUrl,
       fileId: args.fileId,
@@ -38,6 +39,7 @@ export const update = mutation({
       ...(description !== undefined && { description }),
       ...(tags !== undefined && { tags }),
       ...(stars !== undefined && { stars }),
+      fulltext: (title ?? "") + (description ?? "")
     })
   }
 })

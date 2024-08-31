@@ -1,8 +1,13 @@
 "use client"
 
-import { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext } from "react";
 
-const SearchContext = createContext({});
+interface SearchContextType {
+  searchValue: string,
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
 export function SearchContextProvider({ children } : { children: React.ReactNode }) {
   //TODO: Update to support tag searching as well.
@@ -16,5 +21,9 @@ export function SearchContextProvider({ children } : { children: React.ReactNode
 }
 
 export function useSearch() {
-  return useContext(SearchContext);
+
+  const context = useContext(SearchContext);
+  if(context === undefined) throw new Error("useSearch must be used within a SearchContextProvider");
+
+  return context;
 }

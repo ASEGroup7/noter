@@ -6,13 +6,13 @@ import { Id } from "../_generated/dataModel";
 export const list = query({
   args: { 
     paginationOpts: paginationOptsValidator,
-    search: v.optional(v.string()),
+    fulltext: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     let results;
 
-    if(args.search === undefined || args.search === "") {
+    if(args.fulltext === undefined || args.fulltext === "") {
       results = await ctx.db
         .query("notes")
         .order("desc")
@@ -20,7 +20,7 @@ export const list = query({
     } else {
       results = await ctx.db
         .query("notes")
-        .withSearchIndex("search_fulltext", q => q.search("fulltext", args.search as string))
+        .withSearchIndex("search_fulltext", q => q.search("fulltext", args.fulltext as string))
         .paginate(args.paginationOpts)
     }
 
