@@ -4,26 +4,27 @@ import { v } from "convex/values";
 export const notesTableSchema = v.object({
   description: v.string(),
   fileUrl: v.string(),
-  fileId: v.string(),
+  // fileId: v.string(),
   stars: v.float64(),
   tags: v.array(v.string()),
   title: v.string(),
   fulltext: v.string(),
-  userId: v.string(),
-  numberOfLikes: v.string()
+  userId: v.string(), // notes must have an owner
+  numberOfLikes: v.int64()
 })
 
 export const userTableSchema = v.object({
-  userId: v.string(),
-  likedFileId: v.string(), //change to list of liked files
-  commentedFileId: v.string(), //change to list of comment id
-  ratedFileId: v.string() //change to list of dictionaries. dict: {fileid: string, rating: int}
+  // userId: v.string(), 
+  likedFileId: v.array(v.string()), 
+  commentedFileId: v.array(v.string()), 
+  ratedFileId: v.array(v.object({ fileid: v.string(), rating: v.int64() })) 
+  //ratedFileId: [{fileid: string, rating: int}, {fileid: string, rating: int}, ...]
 })
 
 export const commentsTableSchema = v.object({
-  commentId: v.string(),
-  userId: v.string(),
-  fileId: v.string(),
+  // commentId: v.string(),
+  userId: v.string(), //comments must have an owner
+  fileId: v.string(), //comments must be tagged to a file
   content: v.string()
 })
 
