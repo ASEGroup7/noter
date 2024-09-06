@@ -22,7 +22,6 @@ jobs:
 
       - name: Run Jest Tests
         id: run_jest_tests
-        continue-on-error: true
         run: |
           set +e
           npm test 
