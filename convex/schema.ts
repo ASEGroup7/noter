@@ -4,19 +4,19 @@ import { v } from "convex/values";
 export const notesTableSchema = v.object({
   description: v.string(),
   fileUrl: v.string(),
-  // fileId: v.string(),
+  fileId: v.string(),
   stars: v.float64(),
   tags: v.array(v.string()),
   title: v.string(),
   fulltext: v.string(),
   userId: v.string(), // notes must have an owner
-  numberOfLikes: v.int64()
 })
 
 export const userTableSchema = v.object({
   // userId: v.string(), 
   likedFileId: v.array(v.string()), 
   commentedFileId: v.array(v.string()), 
+  // TODO change ratedFileID to StarredFileId
   ratedFileId: v.array(v.object({ fileid: v.string(), rating: v.int64() })) 
   //ratedFileId: [{fileid: string, rating: int}, {fileid: string, rating: int}, ...]
 })

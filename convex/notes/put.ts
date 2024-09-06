@@ -18,6 +18,7 @@ export const create = mutation({
       tags: [],
       fileUrl: args.fileUrl,
       fileId: args.fileId,
+      userId: ""
     })
     return newNoteId;
   }
