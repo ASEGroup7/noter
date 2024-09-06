@@ -1,0 +1,43 @@
+name: Jest Tests
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  e2e_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Jest Tests
+        id: run_jest_tests
+        continue-on-error: true
+        run: |
+          set +e
+          npm test 
+          exit_code=$?  # Capture exit code of the Jest command
+          echo "JEST_EXIT_CODE=$exit_code" >> $GITHUB_ENV
+
+      - name: Obtain Exit Codes
+        run: |
+          echo "Exit code of Jest tests: ${{ env.JEST_EXIT_CODE }}"
+
+      - name: Determine Test Result
+        id: determine_result
+        run: |
+          if [ "${{ env.CYPRESS_EXIT_CODE }}" -eq 0 ]; then
+            echo "RESULT=passed" >> $GITHUB_ENV
+          else
+            echo "RESULT=failed" >> $GITHUB_ENV
+          fi
