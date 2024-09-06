@@ -10,15 +10,15 @@ export const notesTableSchema = v.object({
   title: v.string(),
   fulltext: v.string(),
   userId: v.string(), // notes must have an owner
+  downloads: v.float64()
 })
 
 export const userTableSchema = v.object({
   // userId: v.string(), 
-  likedFileId: v.array(v.string()), 
+  starredFileId: v.array(v.string()), 
   commentedFileId: v.array(v.string()), 
   // TODO change ratedFileID to StarredFileId
-  ratedFileId: v.array(v.object({ fileid: v.string(), rating: v.int64() })) 
-  //ratedFileId: [{fileid: string, rating: int}, {fileid: string, rating: int}, ...]
+  
 })
 
 export const commentsTableSchema = v.object({
@@ -39,3 +39,5 @@ export default defineSchema({
   comments: defineTable(commentsTableSchema)
 
 });
+
+// "pnpx convex dev" to update schema 
