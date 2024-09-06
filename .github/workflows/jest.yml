@@ -22,6 +22,7 @@ jobs:
 
       - name: Run Jest Tests
         id: run_jest_tests
+        continue-on-error: true
         run: |
           set +e
           npm test 
@@ -31,3 +32,13 @@ jobs:
       - name: Obtain Exit Codes
         run: |
           echo "Exit code of Jest tests: ${{ env.JEST_EXIT_CODE }}"
+
+      - name: Check Jest Test Exit Code
+        run: |
+          exit_code=$?
+          echo "Exit code of Jest tests: $exit_code"
+          
+          if [ $exit_code -ne 0 ]; then
+            echo "Tests failed with exit code $exit_code"
+            exit $exit_code  # This will fail the workflow
+          fi
