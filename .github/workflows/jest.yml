@@ -32,12 +32,3 @@ jobs:
       - name: Obtain Exit Codes
         run: |
           echo "Exit code of Jest tests: ${{ env.JEST_EXIT_CODE }}"
-
-      - name: Determine Test Result
-        id: determine_result
-        run: |
-          if [ "${{ env.CYPRESS_EXIT_CODE }}" -eq 0 ]; then
-            echo "RESULT=passed" >> $GITHUB_ENV
-          else
-            echo "RESULT=failed" >> $GITHUB_ENV
-          fi
