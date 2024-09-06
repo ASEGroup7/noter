@@ -5,7 +5,7 @@ on:
   push:
 
 jobs:
-  e2e_tests:
+  jest_tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,10 +28,6 @@ jobs:
           npm test 
           exit_code=$?  # Capture exit code of the Jest command
           echo "JEST_EXIT_CODE=$exit_code" >> $GITHUB_ENV
-
-      - name: Obtain Exit Codes
-        run: |
-          echo "Exit code of Jest tests: ${{ env.JEST_EXIT_CODE }}"
 
       - name: Check Jest Test Exit Code
         run: |
