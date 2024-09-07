@@ -25,26 +25,26 @@ export default function Note({
   
   const descriptionElements = [
     [
-      <DocumentTextIcon className="size-3" />,
-      <span>PDF</span>
+      <DocumentTextIcon key="pdf-icon" className="size-3" />,
+      <span key="pdf-text">PDF</span>
     ],
     [
-      <span>{formatDistance(new Date(_creationTime), new Date(), { addSuffix: true })}</span>
+      <span key="creation-time">{formatDistance(new Date(_creationTime), new Date(), { addSuffix: true })}</span>
     ],
     [
-      <ArrowDownTrayIcon className="size-3" />,
-      <span>{downloads}</span>
+      <ArrowDownTrayIcon key="download-icon" className="size-3" />,
+      <span key="download-count">{downloads}</span>
     ],
     [
-      <StarIcon className="size-3 fill-yellow-400" />,
-      <span>{stars}</span>
+      <StarIcon key="star-icon" className="size-3 fill-yellow-400" />,
+      <span key="star-count">{stars}</span>
     ]
   ]
 
   return(
-    <div className={cn(
+    <Link href={`/notes/view?id=${_id}`} className={cn(
       className,
-      "h-[60px] rounded-lg bg-slate-50 shadow-sm p-2"
+      "h-[60px] rounded-lg bg-slate-50 shadow-sm p-2 hover:bg-slate-100"
     )}>
       <div className="text-lg font-bold">{title}</div>
       <div className="flex flex-row gap-1 text-muted-foreground text-sm">
@@ -59,6 +59,6 @@ export default function Note({
           })
         }
       </div>
-    </div>
+    </Link>
   )
 }

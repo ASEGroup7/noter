@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import Note from "./note";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -29,16 +28,8 @@ export default function Notes({
       className,
       "flex flex-col gap-3"
     )}>
-      { status === "LoadingFirstPage" ? <NotesSkeleton /> : null }
+      { status === "LoadingFirstPage" ? <Skeleton className="h-[60px] w-full rounded-lg" /> : null }
       { notes.map(note => <Note key={note._id} {...note} />) }
     </div>
   )
-}
-
-function NotesSkeleton() {
-  return <>
-    <Skeleton className="h-[60px] w-full rounded-lg" />
-    <Skeleton className="h-[60px] w-full rounded-lg" />
-    <Skeleton className="h-[60px] w-full rounded-lg" />
-  </>
 }
