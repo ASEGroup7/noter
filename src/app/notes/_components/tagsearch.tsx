@@ -6,20 +6,21 @@ import { Button } from "@/components/ui/button";
 import { SelectSeparator } from "@/components/ui/select";
 
 import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { api } from "@convex/api";
 import { useQuery } from "convex/react";
 import { useDebouncedCallback } from "use-debounce";
+import { useToggle } from "@/components/hooks/useToggle";
 import { useSearch } from "@/components/providers/SearchContextProvider";
 import { Skeleton } from "@/components/ui/skeleton";
 
-//TODO : Implement tag search ontop of our fulltext search
+//TODO : Implement tag search on top of our fulltext search
 export default function TagSearch({
   className,
 } : {
   className?: string,
 }) {
-
+  
   const { searchValue, setSearchValue } = useSearch();
   const [ searchTagsValue, setSearchTagsValue ] = useState("");
   const [ selectedTags, setSelectedTags ] = useState<string[]>([]);
@@ -33,7 +34,7 @@ export default function TagSearch({
       ""
     )}>
       <Input placeholder="Search tags ..." defaultValue={searchTagsValue} onChange={(e) => debouncedSearchTagValue(e.target.value)} />
-      <div className="flex flex-wrap p-2 gap-2">
+      <div className="flex flex-wrap pt-4 gap-2">
         {
           tags ? tags.map(row => (
             <Badge

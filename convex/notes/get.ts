@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query } from "../_generated/server";
+import { action, query } from "../_generated/server";
 import { paginationOptsValidator } from "convex/server";
 import { Id } from "../_generated/dataModel";
 
