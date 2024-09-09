@@ -20,7 +20,6 @@ export const create = mutation({
       fileUrl: args.fileUrl,
       fileId: args.fileId,
       userId: "",
-      downloads: 0
     })
     return newNoteId;
   }

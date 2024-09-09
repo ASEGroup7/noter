@@ -11,7 +11,6 @@ export const notesTableSchema = v.object({
   title: v.string(),
   fulltext: v.string(),
   userId: v.string(), // notes must have an owner
-  downloads: v.float64()
 })
 
 export const userTableSchema = v.object({
