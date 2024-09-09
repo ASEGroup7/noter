@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SelectSeparator } from "@/components/ui/select";
 
 import { cn } from "@/lib/utils";
@@ -10,9 +11,8 @@ import { useState } from "react";
 import { api } from "@convex/api";
 import { useQuery } from "convex/react";
 import { useDebouncedCallback } from "use-debounce";
-import { useToggle } from "@/components/hooks/useToggle";
+import useToggle from "@/components/hooks/useToggle";
 import { useSearch } from "@/components/providers/SearchContextProvider";
-import { Skeleton } from "@/components/ui/skeleton";
 
 //TODO : Implement tag search on top of our fulltext search
 export default function TagSearch({
@@ -40,6 +40,10 @@ export default function TagSearch({
             <Badge
               key={row.tag}
               variant="outline"
+              onClick={() => {
+                if (selectedTags.includes(row.tag)) setSelectedTags(selectedTags.filter(tag => tag !== row.tag));
+                else setSelectedTags([...selectedTags, row.tag]);
+              }}
               className={`hover:cursor-pointer hover:bg-slate-100 transition ${selectedTags.includes(row.tag) ? "bg-slate-100" : "bg-white"}`}
             >
               {row.tag}

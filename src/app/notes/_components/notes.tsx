@@ -1,35 +1,43 @@
-"use client"
+"use client";
 
 import Note from "./note";
-import { Skeleton } from "@/components/ui/skeleton";
+import NoteSkeleton from "./noteskeleton";
 
+import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
 import { useRef, useEffect } from "react";
 import { usePaginatedQuery } from "convex/react";
-import { useSearch } from "@/components/providers/SearchContextProvider"
-import { cn } from "@/lib/utils";
+import useScroll from "@/components/hooks/useScroll";
 
-//TODO : Add infinite scrolling
-export default function Notes({
-  className,
-} : {
-  className ?: string,
-}) {
+export default function Notes({ className }: { className?: string }) {
   const notesRef = useRef<HTMLDivElement | null>(null);
-  const { searchValue, setSearchValue } = useSearch();
-  const { results : notes, status, loadMore } = usePaginatedQuery(
-    api.notes.get.list,
-    { fulltext: searchValue },
-    { initialNumItems: 10 }
-  );
+  const {
+    results: notes,
+    status,
+    loadMore,
+  } = usePaginatedQuery(api.notes.get.list, {}, { initialNumItems: 5 });
 
-  return(
-    <div ref={notesRef} className={cn(
-      className,
-      "flex flex-col gap-3"
-    )}>
-      { status === "LoadingFirstPage" ? <Skeleton className="h-[60px] w-full rounded-lg" /> : null }
-      { notes.map(note => <Note key={note._id} {...note} />) }
+  useScroll(notesRef, () => loadMore(5));
+
+  return (
+
+    <div
+      ref={notesRef}
+      className={cn(
+        className,
+        "flex flex-col h-[calc(100vh-122px)] overflow-y-auto no-scrollbar"
+      )}
+    >
+      {status === "LoadingFirstPage" ? (
+        <>
+          <NoteSkeleton />
+          <NoteSkeleton />
+          <NoteSkeleton />
+        </>
+      ) : null}
+      {notes.map((note) => (
+        <Note key={note._id} {...note} />
+      ))}
     </div>
-  )
+  );
 }
