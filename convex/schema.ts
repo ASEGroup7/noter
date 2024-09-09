@@ -6,6 +6,7 @@ export const notesTableSchema = v.object({
   fileUrl: v.string(),
   fileId: v.string(),
   stars: v.float64(),
+  downloads: v.float64(),
   tags: v.array(v.string()),
   title: v.string(),
   fulltext: v.string(),

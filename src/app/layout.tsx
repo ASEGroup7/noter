@@ -6,8 +6,9 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Navbar } from "@/components/Navbar";
+import { Navbar } from "@/components/layout/navbar"
 import { ConvexClientProvider } from "@/components/providers/ConvexClientProvider";
+import { SearchContextProvider } from "@/components/providers/SearchContextProvider";
 
 export const metadata: Metadata = {
   title: "Noter",
@@ -24,12 +25,16 @@ export default function RootLayout({
       <html lang="en">
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
+            "min-h-screen flex flex-col bg-background font-sans antialiased",
             inter.variable
           )}
         >
           <Navbar />
-          <ConvexClientProvider>{children}</ConvexClientProvider>
+          <ConvexClientProvider>
+            <SearchContextProvider>
+              { children }
+            </SearchContextProvider>
+          </ConvexClientProvider>
         </body>
       </html>
     </ClerkProvider>
