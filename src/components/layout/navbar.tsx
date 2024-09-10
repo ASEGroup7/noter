@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { inputStyles } from "@/components/ui/input";
-import { buttonVariants } from "@/components/ui/button";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { CommandDialog, CommandInput, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 
@@ -63,6 +64,10 @@ export function Navbar() {
                 <span>⌘ K</span>
               </kbd>
             </div>
+            <Button variant="link">
+              <PencilSquareIcon className="size-6 mr-1  " />
+              Start Writing
+            </Button>
             <UserButton />
         </SignedIn>
 
@@ -82,7 +87,11 @@ export function Navbar() {
           <CommandGroup heading="Notes">
             {
               results ? results.map((item) => (
-                <CommandItem key={item._id}>{item.title}</CommandItem>
+                <CommandItem key={item._id}>
+                  <Link href={`/notes/view?id=${item._id}`}>
+                    {item.title}
+                  </Link>
+                </CommandItem>
               )) : <span>Loading ... </span>
             }
           </CommandGroup>
