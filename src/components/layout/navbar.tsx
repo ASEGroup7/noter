@@ -60,20 +60,16 @@ export function Navbar() {
             )}>
               <MagnifyingGlassIcon className="h-3 w-3" aria-hidden="true" />
               <span className="mr-auto">Search notes, topics ...</span>
-              <kbd className="rounded border bg-muted px-1.5 text-[10px]">
+              <kbd className="rounded border bg-muted px-1.5 text-[10px] shadow-sm">
                 <span>⌘ K</span>
               </kbd>
             </div>
-            <Button variant="link">
-              <PencilSquareIcon className="size-6 mr-1  " />
-              Start Writing
-            </Button>
             <UserButton />
         </SignedIn>
 
         <SignedOut>
-          <Link className={buttonVariants({variant: "default"})} href="/sign-in">Sign In</Link>
-          <Link className={buttonVariants({variant: "ghost"})} href="/sign-up">Get Started</Link>
+          <Link className={cn(buttonVariants({variant: "link"}), "ml-auto")} href="/sign-in">Sign In</Link>
+          <Link className={buttonVariants({variant: "default"})} href="/sign-up">Get Started</Link>
         </SignedOut>
       </div>
 

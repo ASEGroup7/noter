@@ -5,7 +5,7 @@ import NoteSkeleton from "./noteskeleton";
 
 import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { usePaginatedQuery } from "convex/react";
 import useScroll from "@/components/hooks/useScroll";
 
@@ -20,12 +20,11 @@ export default function Notes({ className }: { className?: string }) {
   useScroll(notesRef, () => loadMore(5));
 
   return (
-
     <div
       ref={notesRef}
       className={cn(
         className,
-        "flex flex-col h-[calc(100vh-122px)] overflow-y-auto no-scrollbar"
+        "flex-1 flex flex-col overflow-y-auto no-scrollbar"
       )}
     >
       {status === "LoadingFirstPage" ? (

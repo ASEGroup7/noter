@@ -1,16 +1,18 @@
-import "./globals.css";
-import type { Metadata } from "next";
-import { Inter, Noto_Sans } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-const noto = Noto_Sans({ weight: ['400', '700'], subsets: ['latin']})
-
-import { cn } from "@/lib/utils";
-import { ClerkProvider } from "@clerk/nextjs";
-import { Navbar } from "@/components/layout/navbar"
+import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { Toaster } from "@/components/ui/sonner";
+
+import "./globals.css";
+import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Inter, Noto_Sans } from "next/font/google";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { ConvexClientProvider } from "@/components/providers/ConvexClientProvider";
 import { SearchContextProvider } from "@/components/providers/SearchContextProvider";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const noto = Noto_Sans({ weight: ["400", "700"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Noter",
@@ -27,15 +29,17 @@ export default function RootLayout({
       <html lang="en">
         <body
           className={cn(
-            "min-h-screen flex flex-col bg-background font-sans antialiased",
+            "min-h-screen flex flex-col bg-background antialiased",
             noto.className
           )}
         >
           <ConvexClientProvider>
             <SearchContextProvider>
-              <Navbar />
-              { children }
-              <Footer />
+              <TooltipProvider>
+                <Navbar />
+                {children}
+                <Toaster />
+              </TooltipProvider>
             </SearchContextProvider>
           </ConvexClientProvider>
         </body>

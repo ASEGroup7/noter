@@ -47,11 +47,11 @@ export default function Note({
   );
 
   return (
-    <Link href={`/notes/view?id=${_id}`} className={cn(className, "flex py-8 border-b gap-4")}>
+    <Link href={`/notes/view?id=${_id}`} className={cn(className, "flex py-8 border-b gap-4 text-zinc-600")}>
       <div className="flex flex-col w-[80%]">
-        <small className="mb-3 hover:underline">{`In ${tags[0]}`}</small>
-        <h3 className="text-3xl font-bold mb-1">{title}</h3>
-        <h4 className="mb-4">{description}</h4>
+        <small className="mb-3 hover:underline text-black">{`In ${tags[0]}`}</small>
+        <h3 className="text-3xl font-bold mb-1 text-black">{title}</h3>
+        <h4 className="mb-4 ">{description}</h4>
         <div className="flex items-center gap-4 text-sm">
           {descriptionElements.map((item, index) => (
             <div key={index} className="flex items-center gap-1">
