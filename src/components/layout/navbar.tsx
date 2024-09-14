@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { inputStyles } from "@/components/ui/input";
+import UserButton from "@/components/common/userbutton";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
@@ -13,8 +14,8 @@ import { api } from "@convex/api";
 import { useState, useEffect } from "react";
 import { usePaginatedQuery } from "convex/react";
 import { useDebouncedCallback } from "use-debounce";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { useSearch } from "../providers/SearchContextProvider";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export function Navbar() {
   const { searchValue, setSearchValue } = useSearch();
