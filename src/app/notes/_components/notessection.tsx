@@ -9,7 +9,7 @@ import { useRef } from "react";
 import { usePaginatedQuery } from "convex/react";
 import useScroll from "@/components/hooks/useScroll";
 
-export default function Notes({ className }: { className?: string }) {
+export default function NotesSection({ className }: { className?: string }) {
   const notesRef = useRef<HTMLDivElement | null>(null);
   const {
     results: notes,
@@ -37,6 +37,7 @@ export default function Notes({ className }: { className?: string }) {
       {notes.map((note) => (
         <Note key={note._id} {...note} />
       ))}
+      
     </div>
   );
 }

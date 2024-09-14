@@ -17,7 +17,6 @@ import { useSearchParams, usePathname } from "next/navigation";
 export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pathName = usePathname();
   const id = searchParams.get("id");
   if(id === null) router.push("/notes");
 

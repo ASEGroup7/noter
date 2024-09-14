@@ -27,7 +27,7 @@
     "@radix-ui/react-visually-hidden": "^1.1.0",
     "@splinetool/react-spline": "^4.0.0",
     "@splinetool/runtime": "^1.9.24",
-    "@uploadthing/react": "^6.7.2",
+    "@uploadthing/react": "^6.8.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",

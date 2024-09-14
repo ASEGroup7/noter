@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { StarIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
+
 import { cn } from "@/lib/utils";
 import { Id } from "@convex/dataModel";
 import { useMemo } from "react";
@@ -25,7 +26,6 @@ export default function Note({
   className?: string;
 }) {
 
-  // Memoize the parsed creation time to avoid unnecessary recalculations.
   const creationDate = useMemo(() => new Date(_creationTime), [_creationTime]);
   const descriptionElements = useMemo(
     () => [
@@ -47,7 +47,10 @@ export default function Note({
   );
 
   return (
-    <Link href={`/notes/view?id=${_id}`} className={cn(className, "flex py-8 border-b gap-4 text-zinc-600")}>
+    <Link
+      href={`/notes/view?id=${_id}`}
+      className={cn(className, "flex py-8 border-b gap-4 text-zinc-600")}
+    >
       <div className="flex flex-col w-[80%]">
         <small className="mb-3 hover:underline text-black">{`In ${tags[0]}`}</small>
         <h3 className="text-3xl font-bold mb-1 text-black">{title}</h3>
