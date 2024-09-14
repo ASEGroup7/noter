@@ -6,7 +6,7 @@ export default function Page() {
       <h1 className="text-9xl">Uh OH</h1>
       <p className="text-sm">
         Go to {" "}
-        <Link href="/" className="underline">
+        <Link href="/" className="underline ">
           home page
         </Link>
       </p>
