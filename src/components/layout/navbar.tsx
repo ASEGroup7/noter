@@ -1,24 +1,27 @@
 "use client"
 
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { inputStyles } from "@/components/ui/input";
-import UserButton from "@/components/common/userbutton";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { UserIcon, BookmarkIcon, Cog8ToothIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import { CommandDialog, CommandInput, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuItemLink, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { usePaginatedQuery } from "convex/react";
+import { useUser, useClerk } from "@clerk/nextjs";
 import { useDebouncedCallback } from "use-debounce";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { useSearch } from "../providers/SearchContextProvider";
 
 export function Navbar() {
   const { searchValue, setSearchValue } = useSearch();
+  const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
   const [ isDialogOpen, setIsDialogOpen ] = useState(false);
   const setDebouncedSearchValue = useDebouncedCallback(setSearchValue, 300);
   const { results } = usePaginatedQuery(
@@ -26,6 +29,10 @@ export function Navbar() {
     { fulltext: searchValue },
     { initialNumItems: 5 }
   )
+
+  const user = useUser();
+  const { signOut } = useClerk();
+  const userProfileImageUrl = user.user?.imageUrl;
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -65,7 +72,37 @@ export function Navbar() {
                 <span>⌘ K</span>
               </kbd>
             </div>
-            <UserButton />
+
+            <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+              <DropdownMenuTrigger asChild>
+                  {/* user.isLoaded ? <Image height={32} width={32} src={userProfileImageUrl || ""} alt="Profile image" className="rounded-full shadow-sm"/> */}
+                <Avatar>
+                  <AvatarImage src={userProfileImageUrl}/>
+                  <AvatarFallback />
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[200px] translate-x-[-10px]">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <DropdownMenuItemLink href={`/profile/${user.user?.id}`} onClick={() =>setIsDropdownOpen(false)}>
+                      <UserIcon className="size-4" />
+                      <span>Profile</span>
+                    </DropdownMenuItemLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <DropdownMenuItemLink href="/library" onClick={() =>setIsDropdownOpen(false)}>
+                      <BookmarkIcon className="size-4" />
+                      <span>My notes</span>
+                    </DropdownMenuItemLink>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => signOut()} className="flex items-center gap-2 w-full">
+                  <ArrowRightStartOnRectangleIcon className="size-4" />
+                  <span>Sign out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
         </SignedIn>
 
         <SignedOut>

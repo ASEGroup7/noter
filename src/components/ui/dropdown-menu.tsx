@@ -9,6 +9,7 @@ import {
 } from "@radix-ui/react-icons"
 
 import { cn } from "@/lib/utils"
+import Link, { LinkProps } from "next/link"
 
 const DropdownMenu = DropdownMenuPrimitive.Root
 
@@ -186,6 +187,20 @@ const DropdownMenuShortcut = ({
 }
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut"
 
+// CUSTOM COMPONENT
+interface DropdownMenuLinkProps extends LinkProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+function DropdownMenuItemLink({ children, ...props }: DropdownMenuLinkProps) {
+  return(
+    <Link {...props} className="flex items-center gap-2 w-full" onClick={props.onClick}>
+      { children }
+    </Link>
+  )
+}
+
 export {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -202,4 +217,5 @@ export {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuRadioGroup,
+  DropdownMenuItemLink
 }
