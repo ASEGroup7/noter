@@ -1,10 +1,11 @@
 "use client"
 
+import Comments from "./_components/comments";
 import PageSkeleton from "./_components/pageskeleton";
 import CustomTooltip from "@/components/common/customtooltip";
 import PageContainer from "@/components/layout/pagecontainer";
-import { StarIcon, ChartBarIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
 import { EllipsisHorizontalIcon, PlusIcon, LinkIcon } from "@heroicons/react/24/solid";
+import { StarIcon, ChartBarIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
 import { toast } from "sonner";
@@ -13,9 +14,10 @@ import { useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { copyToClipboard } from "@/lib/utils";
-import { useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function Page() {
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -48,9 +50,15 @@ export default function Page() {
             trigger={<><ChartBarIcon className="size-4" /><span>{note?.downloads || 0}</span></>}
             content="Downloads"
           />
-          <CustomTooltip
-            trigger={<><ChatBubbleOvalLeftIcon className="size-4" /><span>{note?.downloads || 0}</span></>}
-            content="Comments"
+          
+          <Comments 
+            id={id}
+            trigger={
+              <CustomTooltip
+                trigger={<><ChatBubbleOvalLeftIcon className="size-4" /><span>{note?.downloads || 0}</span></>}
+                content="Comments"
+              />
+            }
           />
         </div>
 
@@ -58,7 +66,7 @@ export default function Page() {
 
         <div className="flex gap-4">
           <CustomTooltip trigger={<PlusIcon className="size-6" />} onClick={() => console.log("Clicked!")}/>
-          <CustomTooltip trigger={<LinkIcon className="size-5" />} onClick={() => console.log("Clicked!")} />
+          <CustomTooltip trigger={<LinkIcon className="size-5" />} onClick={() => copyToClipboard(window.location.href)} />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <EllipsisHorizontalIcon className="size-6"/>
@@ -77,6 +85,7 @@ export default function Page() {
         </div>
       </div>
       {/* Here we display the sanitized HTML */}
+
     </PageContainer>
   )
 }

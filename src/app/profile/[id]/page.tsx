@@ -1,22 +1,19 @@
 "use client"
 
-import Link from "next/link";
-import Image from "next/image";
-import { Label } from "@/components/ui/label";
 import EditForm from "./_components/editform";
+import { Skeleton } from "@/components/ui/skeleton";
 import PageContainer from "@/components/layout/pagecontainer";
-import { Button, buttonVariants } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { EllipsisHorizontalIcon, LinkIcon, PencilIcon } from "@heroicons/react/24/solid";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 import axios from "axios";
 import { format } from "date-fns";
+import { useUser } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
 import { useState, useEffect } from "react";
 import { User } from "@clerk/clerk-sdk-node";
-import { useUser, useClerk } from "@clerk/nextjs";
 import { toPascalCase, copyToClipboard } from "@/lib/utils";
 
 export default function Page({
@@ -49,6 +46,7 @@ export default function Page({
     getUserData();
   }, [params.id]);
 
+  // TODO: Add skeleton for when user is still loading.
   return (
     <PageContainer>
       <div className="flex items-center gap-4 py-10 border-b">
@@ -58,12 +56,25 @@ export default function Page({
             <AvatarFallback />
           </Avatar>
           <div className="flex flex-col">
-            <h1 className="text-4xl font-bold">
-              {toPascalCase(profileUser?.username || profileUser?.fullName || "")}
-            </h1>
-            <small className="text-xs">
-              { format(new Date(profileUser?.createdAt || 0), "'Joined ' MMM yyyy")}
-            </small>
+            {
+              profileUser ? <>
+                <h1 className="text-4xl font-bold">
+                  {toPascalCase(
+                    profileUser?.username || profileUser?.fullName || ""
+                  )}
+                </h1>
+                <small className="text-xs">
+                  {format(
+                    new Date(profileUser?.createdAt || 0),
+                    "'Joined ' MMM yyyy"
+                  )}
+                </small>
+              </>
+              : <>
+                <Skeleton className="h-[40px] w-[200px]" />
+                <Skeleton className="h-[16px] w-[80px] mt-1" />
+              </>
+            }
           </div>
         </div>
 
@@ -111,10 +122,10 @@ export default function Page({
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit profile information</DialogTitle>
-              <DialogDescription>
+              {/* <DialogDescription>
                 Make changes to your profile here. Click save when you&apos;re
                 done.
-              </DialogDescription>
+              </DialogDescription> */}
             </DialogHeader>
             <EditForm />
           </DialogContent>

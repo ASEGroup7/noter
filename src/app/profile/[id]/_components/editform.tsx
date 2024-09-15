@@ -53,6 +53,7 @@ export default function EditForm(props: EditFormProps) {
       .catch((e) => console.error(e.errors));
   }
 
+  //TODO : Add bio functionality
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">

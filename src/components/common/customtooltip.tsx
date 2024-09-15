@@ -9,7 +9,7 @@ interface CustomTooltipProps   {
   onClick?: () => void;
 }
 
-export default function CustomTooltipProps(props : CustomTooltipProps) {
+export default function CustomTooltip(props : CustomTooltipProps) {
   return(
     <Tooltip delayDuration={100}>
       <TooltipTrigger onClick={props.onClick} className={cn(
