@@ -2,6 +2,7 @@
 
 import PageSkeleton from "./_components/pageskeleton";
 import CustomTooltip from "@/components/common/customtooltip";
+import PageContainer from "@/components/layout/pagecontainer";
 import { StarIcon, ChartBarIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
 import { EllipsisHorizontalIcon, PlusIcon, LinkIcon } from "@heroicons/react/24/solid";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
@@ -25,7 +26,7 @@ export default function Page() {
   if(note === undefined) return <PageSkeleton />
 
   return (
-    <section className="flex-1 w-[min(680px,90%)] m-auto">
+    <PageContainer>
       <h1 className="text-4xl font-bold mt-12">{note?.title}</h1>
       <h3 className="text-xl mt-5 mb-2 text-zinc-600">{note?.description}</h3>
       <small className="flex w-full flex-wrap mb-5 gap-1">
@@ -76,6 +77,6 @@ export default function Page() {
         </div>
       </div>
       {/* Here we display the sanitized HTML */}
-    </section>
+    </PageContainer>
   )
 }

@@ -20,7 +20,7 @@ export default function Home() {
       <h1 className="text-7xl font-bold">Colaborative</h1>
       <h1 className="text-7xl font-bold">Notes</h1>
       <Link href="/notes" className={cn(
-        buttonVariants({variant: "outline"}),
+        buttonVariants({variant: "default"}),
         "mt-8 w-fit px-8"
       )}>
         Start reading

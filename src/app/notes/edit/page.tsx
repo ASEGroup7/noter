@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/link";
 import { Input } from "@/components/ui/input";
+import PageContainer from "@/components/layout/pagecontainer";
 import { Button, buttonVariants } from "@/components/ui/button";
 
 import { api } from "@convex/api"
@@ -22,6 +23,8 @@ export default function Page() {
   const note = useQuery(api.notes.get.id, { id : id as string })
 
   return(
-    <></>
+    <PageContainer>
+      
+    </PageContainer>
   )
 }
