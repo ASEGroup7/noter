@@ -21,3 +21,10 @@ export function copyToClipboard(str: string) {
     return false;
   })
 }
+
+export function toPascalCase(str: string) {
+  const words = str.match(/[a-zA-Z0-9]+/g) || [];
+
+  return words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+  .join('');
+}
