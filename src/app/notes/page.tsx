@@ -1,14 +1,15 @@
-import TagSearch from "./_components/tagsearch";
-import Notes from "./_components/notes"
-import FullTextSearchBar from "./_components/fulltextsearchbar"
+"use client";
+import NotesSection from "./_components/notessection";
 
 export default function Page() {
-  return(<div className="flex-1 mt-4 grid grid-cols-[1fr_2fr] px-[5%] gap-4">
-    <TagSearch/>
+  return (
+    <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_350px] px-[8%] gap-16 relative">
+
+      <NotesSection />
+      {/* TODO : Add something here. */}
+      <div className="hidden lg:block flex-1 border-l">
+      </div> 
     
-    <div className="pl-4 border-l">
-      <FullTextSearchBar />
-      <Notes className="mt-4"/>
     </div>
-  </div>)
+  );
 }

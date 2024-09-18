@@ -3,13 +3,14 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Circles } from 'react-loading-icons'
 import { TagSelector } from "@/components/common/tagselector";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import { z } from "zod";
+import { toast } from "sonner";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 import { api } from "@convex/api";
 import { useForm } from "react-hook-form";
 import { useQuery, useMutation } from "convex/react"
@@ -40,10 +41,16 @@ export default function EditForm({
       tags: note?.tags,
     }
   })
-
+  
   function handleSubmit(values : z.infer<typeof formSchema>) {
     setIsSubmitted(true);
-    updateNote({ ...values, id }) //TODO : Might have to set up an error handler incase the mutation fails.
+    updateNote({ ...values, id }).then(() => {
+      toast("Your notes have been uploaded!", {
+        description: `${format(new Date().getTime(), "dd/MM/yyyy")}`
+      })
+    }).catch(e => {
+      console.error(e.message);
+    })
   }
 
   //TODO : BUG data form values not taking values from database. Instead just taking the defaultValues defined above.
