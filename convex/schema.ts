@@ -10,6 +10,22 @@ export const notesTableSchema = v.object({
   tags: v.array(v.string()),
   title: v.string(),
   fulltext: v.string(),
+  userId: v.string(), // notes must have an owner
+})
+
+export const userTableSchema = v.object({
+  // userId: v.string(), 
+  starredFileId: v.array(v.string()), 
+  commentedFileId: v.array(v.string()), 
+  // TODO change ratedFileID to StarredFileId
+  
+})
+
+export const commentsTableSchema = v.object({
+  // commentId: v.string(),
+  userId: v.string(), //comments must have an owner
+  fileId: v.string(), //comments must be tagged to a file
+  content: v.string()
 })
 
 export default defineSchema({
@@ -19,4 +35,9 @@ export default defineSchema({
   tags: defineTable({ tag: v.string() }).searchIndex("search_tags", {
     searchField: "tag",
   }),
+  user: defineTable(userTableSchema),
+  comments: defineTable(commentsTableSchema)
+
 });
+
+// "pnpx convex dev" to update schema 
