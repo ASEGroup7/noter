@@ -1,8 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import CustomTooltip from "@/components/common/customtooltip";
 import PageContainer from "@/components/layout/pagecontainer";
+import CustomTooltip from "@/components/common/custom-tooltip";
 import { PlusIcon, ArrowUpTrayIcon } from "@heroicons/react/24/solid";
 
 import { useUser } from "@clerk/nextjs";

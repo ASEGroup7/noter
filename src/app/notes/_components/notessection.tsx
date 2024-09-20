@@ -1,6 +1,7 @@
 "use client";
 
-import Note from "./note";
+// import Note from "./note";
+import Note from "@/components/common/note";
 import NoteSkeleton from "./noteskeleton";
 
 import { cn } from "@/lib/utils";
@@ -35,7 +36,8 @@ export default function NotesSection({ className }: { className?: string }) {
         </>
       ) : null}
       {notes.map((note) => (
-        <Note key={note._id} {...note} />
+        // <Note key={note._id} {...note} />
+        <Note key={note._id} note={note} />
       ))}
       
     </div>

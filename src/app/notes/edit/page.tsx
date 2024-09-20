@@ -3,10 +3,9 @@
 import Link from "next/link";
 import Image from "next/link";
 import { Input } from "@/components/ui/input";
-import PageContainer from "@/components/layout/pagecontainer";
-import { Button, buttonVariants } from "@/components/ui/button";
 import Tiptap from "@/components/common/editor/tiptap";
-import ReactTiptapEdior from "@/components/common/editor/react-tiptap-editor"; //This component is for when we want to start doing form validation before submitting.
+import PageContainer from "@/components/layout/page-container";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 import { z } from "zod";
 import { api } from "@convex/api"

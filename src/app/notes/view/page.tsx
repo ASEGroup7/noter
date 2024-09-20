@@ -2,7 +2,7 @@
 
 import Comments from "./_components/comments";
 import PageSkeleton from "./_components/pageskeleton";
-import CustomTooltip from "@/components/common/customtooltip";
+import CustomTooltip from "@/components/common/custom-tooltip";
 import PageContainer from "@/components/layout/pagecontainer";
 import { EllipsisHorizontalIcon, PlusIcon, LinkIcon } from "@heroicons/react/24/solid";
 import { StarIcon, ChartBarIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
