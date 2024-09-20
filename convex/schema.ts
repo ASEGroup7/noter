@@ -17,7 +17,6 @@ export const userTableSchema = v.object({
   // userId: v.string(), 
   starredFileId: v.array(v.string()), 
   commentedFileId: v.array(v.string()), 
-  // TODO change ratedFileID to StarredFileId
   
 })
 
