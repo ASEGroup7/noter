@@ -2,7 +2,7 @@
 
 import EditForm from "./_components/editform";
 import { Skeleton } from "@/components/ui/skeleton";
-import PageContainer from "@/components/layout/pagecontainer";
+import PageContainer from "@/components/layout/page-container";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { EllipsisHorizontalIcon, LinkIcon, PencilIcon } from "@heroicons/react/24/solid";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -122,10 +122,6 @@ export default function Page({
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit profile information</DialogTitle>
-              {/* <DialogDescription>
-                Make changes to your profile here. Click save when you&apos;re
-                done.
-              </DialogDescription> */}
             </DialogHeader>
             <EditForm />
           </DialogContent>
