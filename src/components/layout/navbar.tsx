@@ -13,7 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
 import React, { useState, useEffect } from "react";
-import { usePaginatedQuery } from "convex/react";
+import { usePaginatedQuery, useQuery } from "convex/react";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useDebouncedCallback } from "use-debounce";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
@@ -24,10 +24,17 @@ export function Navbar() {
   const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
   const [ isDialogOpen, setIsDialogOpen ] = useState(false);
   const setDebouncedSearchValue = useDebouncedCallback(setSearchValue, 300);
-  const { results } = usePaginatedQuery(
+  const { results  } = usePaginatedQuery(
     api.notes.get.list,
     { fulltext: searchValue },
     { initialNumItems: 5 }
+  )
+
+  const tags = useQuery(
+    api.tags.get.list,
+    {
+      search: searchValue
+    }
   )
 
   const user = useUser();
@@ -54,8 +61,8 @@ export function Navbar() {
             priority
             src="/Logo.png"
             alt="Noter Logo"
-            height={60}
-            width={90}
+            height={35}
+            width={35}
           />
         </Link>
 
@@ -64,45 +71,44 @@ export function Navbar() {
             onClick={() => setIsDialogOpen(true)}
             className={cn(
               inputStyles,
-              "flex items-center w-[300px] gap-2 text-muted-foreground hover:cursor-text mr-auto"
+              "flex items-center w-[300px] gap-2 text-muted-foreground hover:cursor-text mr-auto rounded-full"
             )}>
-              <MagnifyingGlassIcon className="h-3 w-3" aria-hidden="true" />
-              <span className="mr-auto">Search notes, topics ...</span>
-              <kbd className="rounded border bg-muted px-1.5 text-[10px] shadow-sm">
-                <span>⌘ K</span>
-              </kbd>
-            </div>
+            <MagnifyingGlassIcon className="h-3 w-3" aria-hidden="true" />
+            <span className="mr-auto">Search notes, topics ...</span>
+            <kbd className="rounded border bg-muted px-1.5 text-[10px] shadow-sm">
+              <span>⌘ K</span>
+            </kbd>
+          </div>
 
-            <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-              <DropdownMenuTrigger asChild>
-                  {/* user.isLoaded ? <Image height={32} width={32} src={userProfileImageUrl || ""} alt="Profile image" className="rounded-full shadow-sm"/> */}
-                <Avatar>
-                  <AvatarImage src={userProfileImageUrl}/>
-                  <AvatarFallback />
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[200px] translate-x-[-10px]">
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <DropdownMenuItemLink href={`/profile/${user.user?.id}`} onClick={() =>setIsDropdownOpen(false)}>
-                      <UserIcon className="size-4" />
-                      <span>Profile</span>
-                    </DropdownMenuItemLink>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <DropdownMenuItemLink href="/library" onClick={() =>setIsDropdownOpen(false)}>
-                      <BookmarkIcon className="size-4" />
-                      <span>My notes</span>
-                    </DropdownMenuItemLink>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => signOut()} className="flex items-center gap-2 w-full">
-                  <ArrowRightStartOnRectangleIcon className="size-4" />
-                  <span>Sign out</span>
+          <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+            <DropdownMenuTrigger asChild>
+              <Avatar className="h-[35px] w-[35px]">
+                <AvatarImage src={userProfileImageUrl}/>
+                <AvatarFallback />
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[200px] translate-x-[-10px]">
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <DropdownMenuItemLink href={`/profile/${user.user?.id}`} onClick={() =>setIsDropdownOpen(false)}>
+                    <UserIcon className="size-4" />
+                    <span>Profile</span>
+                  </DropdownMenuItemLink>
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <DropdownMenuItem>
+                  <DropdownMenuItemLink href="/library" onClick={() =>setIsDropdownOpen(false)}>
+                    <BookmarkIcon className="size-4" />
+                    <span>My notes</span>
+                  </DropdownMenuItemLink>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => signOut()} className="flex items-center gap-2 w-full">
+                <ArrowRightStartOnRectangleIcon className="size-4" />
+                <span>Sign out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </SignedIn>
 
         <SignedOut>
