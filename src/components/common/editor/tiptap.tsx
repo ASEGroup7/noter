@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { useEditor, EditorContent } from "@tiptap/react";
 import ExtensionHandler from "./extensions/extension-handler";
 
@@ -7,8 +8,8 @@ export default function Tiptap({
   editable = false,
   className,
 } : {
-  initialValue: string,
   onChange: (str: string) => void,
+  initialValue?: string,
   editable?: boolean,
   className?: string,
 }) {
@@ -24,7 +25,10 @@ export default function Tiptap({
     },
     editorProps: {
       attributes: {
-        class: "min-h-[500px] border-none"
+        class: cn(
+          className,
+          "min-h-[500px] border-none"
+        )
       }
     }
   })

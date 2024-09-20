@@ -34,7 +34,7 @@ export default function Page() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Tiptap initialValue="testing value" onChange={field.onChange} editable />
+                  <Tiptap onChange={field.onChange} editable />
                 </FormControl>
               </FormItem>
             )}
