@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
 import { useRef } from "react";
 import { usePaginatedQuery } from "convex/react";
-import useScroll from "@/components/hooks/useScroll";
+import { useScroll } from "@/components/hooks/useScroll";
 
 export default function NotesSection({ className }: { className?: string }) {
   const notesRef = useRef<HTMLDivElement | null>(null);

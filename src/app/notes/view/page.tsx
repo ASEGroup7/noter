@@ -24,6 +24,7 @@ export default function Page() {
   if(id === null) router.push("/notes");
 
   const note = useQuery(api.notes.get.id, { id: id as string });
+  const creator = note?.userId;
 
   if(note === undefined) return <PageSkeleton />
 

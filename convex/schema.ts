@@ -9,22 +9,20 @@ export const notesTableSchema = v.object({
   downloads: v.float64(),
   tags: v.array(v.string()),
   title: v.string(),
-  fulltext: v.string(),
-  userId: v.string(), // notes must have an owner
+  fulltext: v.string(), //We do fulltext search on only the title and description.
+  userId: v.string(), //Notes must have a userId
 })
+
 
 export const userTableSchema = v.object({
   // userId: v.string(), 
   starredFileId: v.array(v.string()), 
   commentedFileId: v.array(v.string()), 
-  // TODO change ratedFileID to StarredFileId
-  
 })
 
 export const commentsTableSchema = v.object({
-  // commentId: v.string(),
-  userId: v.string(), //comments must have an owner
-  fileId: v.string(), //comments must be tagged to a file
+  userId: v.string(),
+  fileId: v.string(), 
   content: v.string()
 })
 
