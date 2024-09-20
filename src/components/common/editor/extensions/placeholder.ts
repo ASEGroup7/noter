@@ -1,5 +1,5 @@
 import Placeholder from "@tiptap/extension-placeholder";
 
-export default Placeholder.configure({
+export default  Placeholder.configure({
   placeholder: "Write something..."
 })

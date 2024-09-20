@@ -1,3 +1,5 @@
+import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
+
 import { cn } from "@/lib/utils";
 import { useEditor, EditorContent } from "@tiptap/react";
 import ExtensionHandler from "./extensions/extension-handler";
@@ -33,5 +35,7 @@ export default function Tiptap({
     }
   })
 
-  return <EditorContent editor={editor} />
+  return <>
+    <EditorContent editor={editor} />
+  </>
 }
