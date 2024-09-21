@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
+import "katex/dist/katex.min.css";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
