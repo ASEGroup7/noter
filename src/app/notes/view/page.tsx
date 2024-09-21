@@ -25,53 +25,85 @@ export default function Page() {
   if (id === null) router.push("/notes");
 
   const note = useQuery(api.notes.get.id, { id: id as string });
+  const { user, isLoaded } = useUser(); // Get the user and loading state here at the top
 
   // Mutation to increment likes in the database
   const updateNotesMutation = useMutation(api.notes.put.update);
 
   // Local state to manage likes (optimistic UI)
-  const [likes, setLikes] = useState(note?.stars || 0);
-
-  const { user, isLoaded } = useUser(); // Get the user and loading state here at the top
+  const [noOfLikes, setNoOfLikes] = useState(note?.stars || 0);
+  const [isLiked, setIsLiked] = useState<boolean>(() => {
+    // Check if user, publicMetadata, starredFileId, and id exist before checking includes
+    console.log("has user liked this: ", user?.publicMetadata?.starredFileId);
+    if (user?.publicMetadata?.starredFileId && Array.isArray(user.publicMetadata.starredFileId) && id) {
+      return user.publicMetadata.starredFileId.includes(id as string);
+    }
+    return false; // Default to false if no match
+  });  
 
   useEffect(() => {
     // When the note is fetched, update the likes in the state
     if (note) {
-      setLikes(note.stars);
+      setNoOfLikes(note.stars);
     }
   }, [note]);
 
   // Function to handle the like click
   const handleLikeClick = async () => {
-    setLikes((prevLikes) => prevLikes + 1); // Optimistic update
-
     if (!isLoaded || !user) return; // Ensure the user is loaded
+
+    if (!isLiked){
+      setNoOfLikes((prevLikes) => prevLikes + 1); // Optimistic update
+    }
+    else {
+      setNoOfLikes((prevLikes) => prevLikes - 1); // Optimistic update
+    }
+    setIsLiked(!isLiked);
 
     try {
       // Call the mutation to update the stars (likes)
-      if (id !=null){
+      if (id !=null && !isLiked){
         await updateNotesMutation({
           id,
           stars: (note?.stars || 0) + 1, // Increment the stars in the mutation
         });  
+
+        let currentStarredFileId = user.publicMetadata?.starredFileId || [];
+        const updatedStarredFileId = Array.isArray(currentStarredFileId)
+          ? [...currentStarredFileId, id]
+          : [id]; // Ensure it's an array
+        // Use user.update() for client-side metadata update
+        const { data } = await axios.post("/api/user", {
+          id: user.id,
+          starredFileId: updatedStarredFileId
+        });
+        currentStarredFileId = updatedStarredFileId;
+      }
+      else if (id !=null && isLiked){
+        await updateNotesMutation({
+          id,
+          stars: (note?.stars || 0) - 1, 
+        });  
+
+        let currentStarredFileId = user.publicMetadata?.starredFileId || [];
+        const updatedStarredFileId = Array.isArray(currentStarredFileId)
+        ? [...currentStarredFileId.filter(item => item !== id)]
+        : []
+
+        // Use user.update() for client-side metadata update
+        const { data } = await axios.post("/api/user", {
+          id: user.id,
+          starredFileId: updatedStarredFileId
+        });
+
+        currentStarredFileId = updatedStarredFileId;
       }
       
-      // Handle starredFileId update in publicMetadata
-      const currentStarredFileId = user.publicMetadata?.starredFileId || [];
-      const updatedStarredFileId = Array.isArray(currentStarredFileId)
-        ? [...currentStarredFileId, id]
-        : [id]; // Ensure it's an array
-
-      // Use user.update() for client-side metadata update
-      const { data } = await axios.post("/api/user", {
-        id: user.id,
-        starredFileId: updatedStarredFileId
-      });
-
       console.log("StarredFileId updated successfully!");
     } catch (error) {
       console.error("Failed to update likes or starredFileId:", error);
-      setLikes((prevLikes) => prevLikes - 1); // Roll back in case of error
+      setIsLiked(!isLiked);
+      setNoOfLikes(noOfLikes - 1);
     }
   };
 
@@ -95,8 +127,11 @@ export default function Page() {
           <CustomTooltip
             trigger={
               <>
-                <StarIcon className="size-4" />
-                <span>{likes}</span>
+                <StarIcon className={`${
+                  isLiked ? "size-6 text-yellow-400" : "size-4"
+                  } transition-all duration-200`
+                } />
+                <span>{noOfLikes}</span>
               </>
             }
             content="Likes"
