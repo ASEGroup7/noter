@@ -3,7 +3,7 @@
 import Comments from "./_components/comments";
 import PageSkeleton from "./_components/pageskeleton";
 import CustomTooltip from "@/components/common/custom-tooltip";
-import PageContainer from "@/components/layout/pagecontainer";
+import PageContainer from "@/components/layout/page-container";
 import { EllipsisHorizontalIcon, PlusIcon, LinkIcon } from "@heroicons/react/24/solid";
 import { StarIcon, ChartBarIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";

@@ -3,6 +3,7 @@ import { v } from "convex/values";
 
 export const notesTableSchema = v.object({
   description: v.string(),
+  markdown: v.string(),
   fileUrl: v.string(),
   fileId: v.string(),
   stars: v.float64(),
@@ -11,13 +12,6 @@ export const notesTableSchema = v.object({
   title: v.string(),
   fulltext: v.string(), //We do fulltext search on only the title and description.
   userId: v.string(), //Notes must have a userId
-})
-
-
-export const userTableSchema = v.object({
-  // userId: v.string(), 
-  starredFileId: v.array(v.string()), 
-  commentedFileId: v.array(v.string()), 
 })
 
 export const commentsTableSchema = v.object({
@@ -33,7 +27,6 @@ export default defineSchema({
   tags: defineTable({ tag: v.string() }).searchIndex("search_tags", {
     searchField: "tag",
   }),
-  user: defineTable(userTableSchema),
   comments: defineTable(commentsTableSchema)
 
 });

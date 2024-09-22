@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import PageContainer from "@/components/layout/pagecontainer";
+import PageContainer from "@/components/layout/page-container";
 import CustomTooltip from "@/components/common/custom-tooltip";
 import { PlusIcon, ArrowUpTrayIcon } from "@heroicons/react/24/solid";
 

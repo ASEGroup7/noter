@@ -21,7 +21,6 @@ const formSchema = z.object({
 })
 
 export default function Page() {
-  const router = useRouter();
 
   return(
     <PageContainer>
