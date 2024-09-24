@@ -26,7 +26,7 @@ export default function EditorShortcutsDialog(
             </TableRow>
           </TableHeader>
           <TableBody>
-            {shortcuts.map((shortcut, index) => (
+            {shortcuts.map((shortcut) => (
               <TableRow key={shortcut.command}>
                 <TableCell>{shortcut.command}</TableCell>
                 <TableCell>

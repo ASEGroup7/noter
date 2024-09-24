@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import PageContainer from "@/components/layout/page-container";
 import CustomTooltip from "@/components/common/custom-tooltip";
-import { PlusIcon, ArrowUpTrayIcon } from "@heroicons/react/24/solid";
+import { PlusIcon } from "@heroicons/react/24/solid";
 
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
@@ -23,6 +23,7 @@ export default function Page() {
           <CustomTooltip
             trigger={<PlusIcon className="size-7 hover:cursor-pointer fill-slate-600 hover:fill-black transition-all" />}
             content="New note" 
+            onClick={() => router.push("/notes/upload")}
           />
         </div>
       </div>

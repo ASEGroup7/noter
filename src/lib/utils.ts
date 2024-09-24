@@ -29,3 +29,7 @@ export function toPascalCase(str: string) {
   return words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
   .join('');
 }
+
+export function stripHtmlTags(html: string): string {
+  return html.replace(/<\/?[^>]+(>|$)/g, "");
+}

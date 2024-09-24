@@ -46,7 +46,7 @@ export function TagSelector({
           <div className="flex flex-1 flex-wrap items-center gap-2">
           {
             value.length == 0 ? <span className="text-muted-foreground">No tags selected ...</span> : 
-            value.map(tag => <Badge key={tag}>{tag}</Badge>) 
+            value.map(tag => <Badge className="bg-secondary text-primary" key={tag}>{tag}</Badge>) 
           }
           </div>
 

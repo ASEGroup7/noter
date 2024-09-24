@@ -12,7 +12,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 
 import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { usePaginatedQuery, useQuery } from "convex/react";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useDebouncedCallback } from "use-debounce";
