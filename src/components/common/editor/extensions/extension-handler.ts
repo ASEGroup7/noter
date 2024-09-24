@@ -1,4 +1,4 @@
-import Document from "@tiptap/extension-document";
+import DocumentWithTitle from "@/components/common/editor/extensions/document";
 import Blockquote from "@tiptap/extension-blockquote";
 import BulletList from "@tiptap/extension-bullet-list";
 import ListItem from "@tiptap/extension-list-item";
@@ -42,6 +42,7 @@ import TaskItem from "@/components/common/editor/extensions/task-item";
 import TaskList from "@tiptap/extension-task-list";
 import NodeRange from "@tiptap-pro/extension-node-range";
 import UniqueID from "@/components/common/editor/extensions/unique-id";
+import Title from "@/components/common/editor/extensions/title";
 import FileHandler from "@/components/common/editor/extensions/file-handler";
 
 const ExtensionHandler = [
@@ -49,7 +50,7 @@ const ExtensionHandler = [
   Details,
   DetailsContent,
   DetailsSummary,
-  Document,
+  DocumentWithTitle,
   Paragraph,
   Text,
   BulletList,
@@ -89,6 +90,7 @@ const ExtensionHandler = [
   TaskList,
   NodeRange,
   UniqueID,
+  Title,
   FileHandler,
 ]
 

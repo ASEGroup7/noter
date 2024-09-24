@@ -85,7 +85,8 @@
   outline: none;
 }
 
-.tiptap p.is-editor-empty:first-child::before {
+.ProseMirror h1.is-empty:nth-child(1)::before,
+.ProseMirror p.is-empty:nth-child(2):last-child::before {
   color: #adb5bd;
   content: attr(data-placeholder);
   float: left;
@@ -211,6 +212,6 @@
   max-width: 100%;
 
   &.ProseMirror-selectednode {
-    outline: 3px solid var(--purple);
+    outline: 3px solid #0D0D0D;
   }
 }
