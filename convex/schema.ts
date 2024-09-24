@@ -3,11 +3,11 @@ import { v } from "convex/values";
 
 export const notesTableSchema = v.object({
   description: v.string(),
-  markdown: v.string(),
+  html: v.string(),
   fileUrl: v.string(),
   fileId: v.string(),
-  stars: v.float64(),
-  downloads: v.float64(),
+  stars: v.number(),
+  downloads: v.number(),
   tags: v.array(v.string()),
   title: v.string(),
   fulltext: v.string(), //We do fulltext search on only the title and description.
