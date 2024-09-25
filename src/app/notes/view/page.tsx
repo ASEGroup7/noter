@@ -148,7 +148,8 @@ export default function Page() {
           />
 
           <Comments
-            id={id}
+            fileId={id?id:""}
+            userId={user?.id as string}
             trigger={
               <CustomTooltip
                 trigger={
