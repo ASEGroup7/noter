@@ -6,13 +6,11 @@ import { useEditor, EditorContent, HTMLContent } from "@tiptap/react";
 
 export default function Tiptap({
   initialValue,
-  onContentChange,
-  onTitleChange,
+  onChange,
   editable = false,
   className,
 }: {
-  onTitleChange?: (htmlContent: HTMLContent) => void,
-  onContentChange?: (htmlContent : HTMLContent) => void,
+  onChange?: (htmlContent : HTMLContent) => void,
   initialValue?: string,
   editable?: boolean,
   className?: string,
@@ -26,14 +24,13 @@ export default function Tiptap({
     content: initialValue,
     editable: editable,
     onUpdate: ({ editor }) => {
-      onTitleChange && onTitleChange(editor?.view.state.doc.firstChild?.textContent.trim() || "");
-      onContentChange && onContentChange(editor.getHTML());
+      onChange && onChange(editor.getHTML());
     },
     editorProps: {
       attributes: {
         class: cn(
           className,
-          "min-h-[500px] prose prose-sm sm:prose-base m-5 pb-5"
+          "min-h-full min-w-full prose prose-sm sm:prose-base"
           // "min-h-[500px] border-none prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none"
         ),
       },
