@@ -1,6 +1,8 @@
 "use client"
 
+import Image from "next/image";
 import Comments from "./_components/comments";
+import { Button } from "@/components/ui/button";
 import PageSkeleton from "./_components/pageskeleton";
 import CustomTooltip from "@/components/common/custom-tooltip";
 import PageContainer from "@/components/layout/page-container";
@@ -11,20 +13,24 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { toast } from "sonner";
 import { api } from "@convex/api";
 import { useQuery } from "convex/react";
+import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { copyToClipboard } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
+import Tiptap from "@/components/common/editor/tiptap";
 
 export default function Page() {
 
+  const user = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   if(id === null) router.push("/notes");
 
   const note = useQuery(api.notes.get.id, { id: id as string });
-  const creator = note?.userId;
+  const creatorId = note?.userId;
+  const isOwner = creatorId === user?.user?.id;
 
   if(note === undefined) return <PageSkeleton />
 
@@ -74,19 +80,31 @@ export default function Page() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuGroup>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
+                {isOwner && (
+                  <DropdownMenuItem onClick={() => router.push(`/notes/edit?id=${id}`)}>
+                    Edit
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem>Download</DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <span className="text-red-700">Report note</span>
-              </DropdownMenuItem>
+              {isOwner ? (
+                <DropdownMenuItem>
+                  <span className="text-red-700">Delete note</span>
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem>
+                  <span className="text-red-700">Report note</span>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
       {/* Here we display the sanitized HTML */}
-
+      <Tiptap
+        initialValue={note?.html}
+      />
     </PageContainer>
   )
 }

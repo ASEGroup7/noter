@@ -28,7 +28,7 @@ const formSchema = z.object({
 
 export default function Page() {
   const [editorContent, setEditorContent] = useState<HTMLContent>("");
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isUploading, setIsUploading] = useState(false); 
   
   const router = useRouter();
   const { user } = useUser();
@@ -44,7 +44,7 @@ export default function Page() {
   });
 
   function handleSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
+    setIsUploading(true);
 
     const cleanHTML = DOMPurify.sanitize(editorContent);
     createNewNote({
@@ -61,7 +61,7 @@ export default function Page() {
     .then(id => router.push(`/notes/view?id=${id}`))
     .catch(e => {
       console.log(e);
-      setIsLoading(false);
+      setIsUploading(false);
     });
   }
 
@@ -108,6 +108,7 @@ export default function Page() {
                   <Textarea 
                     placeholder="Briefly describe your notes ..."
                     className="max-h-[200px]"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -129,9 +130,9 @@ export default function Page() {
           <Button
             type="submit"
             className="mt-auto"
-            disabled={isLoading} // Disable button when loading
+            disabled={isUploading} // Disable button when loading
           >
-            {isLoading ? (
+            {isUploading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Uploading...
