@@ -19,6 +19,8 @@ import { useUser } from '@clerk/nextjs';
 import axios from "axios";
 
 export default function Page() {
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -90,7 +92,6 @@ export default function Page() {
         ? [...currentStarredFileId.filter(item => item !== id)]
         : []
 
-        // Use user.update() for client-side metadata update
         const { data } = await axios.post("/api/user", {
           id: user.id,
           starredFileId: updatedStarredFileId
@@ -147,20 +148,21 @@ export default function Page() {
             content="Downloads"
           />
 
-          <Comments
-            fileId={id?id:""}
-            userId={user?.id as string}
+          <CustomTooltip
             trigger={
-              <CustomTooltip
-                trigger={
-                  <>
-                    <ChatBubbleOvalLeftIcon className="size-4" />
-                    <span>{note?.downloads || 0}</span>
-                  </>
-                }
-                content="Comments"
-              />
+              <>
+                <ChatBubbleOvalLeftIcon className="size-4" />
+                <span>{note?.downloads || 0}</span>
+              </>
             }
+            content="Comments"
+            onClick={() => setIsCommentsOpen(true)}
+          />
+
+          <Comments
+            fileId={id ? id : ""}
+            open={isCommentsOpen}
+            onOpenChange={setIsCommentsOpen}
           />
         </div>
 

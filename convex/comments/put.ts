@@ -19,21 +19,3 @@ export const create = mutation({
     return newCommentId;
   }
 })
-
-export const update = mutation({
-  args: {
-    id: v.string(),
-    userId: v.string(),
-    fileId: v.string(),
-    content: v.string(),
-  }, 
-  handler: async (ctx, args) => {
-    const { id, userId, fileId, content } = args;
-    await ctx.db.patch(id as Id<"notes">, {
-      ...(userId !== undefined && { userId }),
-      ...(fileId !== undefined && { fileId }),
-      ...(content !== undefined && { content })
-    })
-  }
-})
-
