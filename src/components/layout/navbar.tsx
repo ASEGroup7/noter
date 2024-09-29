@@ -103,7 +103,19 @@ export function Navbar() {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => signOut()} className="flex items-center gap-2 w-full">
+
+              {/* Admin page */}
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <DropdownMenuItemLink href="/admin" onClick={() =>setIsDropdownOpen(false)}>
+                    <Cog8ToothIcon className="size-4" />
+                    <span>Admin dashboard</span>
+                  </DropdownMenuItemLink>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem onClick={() => signOut()} className="flex items-center gap-2 w-full text-red-500">
                 <ArrowRightStartOnRectangleIcon className="size-4" />
                 <span>Sign out</span>
               </DropdownMenuItem>
