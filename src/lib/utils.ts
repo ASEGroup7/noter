@@ -15,7 +15,7 @@ export function truncateString(str: string, maxLength: number): string {
 
 export function copyToClipboard(str: string) {
   navigator.clipboard.writeText(str).then(() => {
-    console.log("Copied to clipboard");
+    toast("Copied to clipboard!")
     return true;
   }).catch((e) => {
     console.error(e);
