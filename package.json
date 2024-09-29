@@ -29,6 +29,7 @@
     "@radix-ui/react-visually-hidden": "^1.1.0",
     "@splinetool/react-spline": "^4.0.0",
     "@splinetool/runtime": "^1.9.24",
+    "@tanstack/react-table": "^8.20.5",
     "@tiptap-pro/extension-details": "^2.11.2",
     "@tiptap-pro/extension-details-content": "^2.11.2",
     "@tiptap-pro/extension-details-summary": "^2.11.2",
