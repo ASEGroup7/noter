@@ -30,8 +30,7 @@ export default function Tiptap({
       attributes: {
         class: cn(
           className,
-          "min-h-full min-w-full prose prose-sm sm:prose-base"
-          // "min-h-[500px] border-none prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none"
+          "prose prose-sm sm:prose-base w-full max-w-none"
         ),
       },
     },
@@ -39,7 +38,7 @@ export default function Tiptap({
 
   return (
     <>
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor}/>
     </>
   );
 }

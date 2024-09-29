@@ -5,13 +5,19 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetFooter, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 import { z } from "zod";
+import { api } from "@convex/api";
+import { useQuery } from "convex/react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
+import { User } from "@clerk/clerk-sdk-node";
+import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface CommentsProps {
   id?: string | null;
-  trigger?: React.ReactNode;
+  open?: boolean;
+  onOpenchange?: (state : boolean) => void;
 }
 
 const formSchema = z.object({
@@ -24,18 +30,13 @@ export default function Comments(props : CommentsProps) {
     resolver: zodResolver(formSchema),
   })
 
+
   function handleSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
 
   return(
-    <Sheet>
-      {
-        props.trigger ? <SheetTrigger>
-          { props.trigger }
-        </SheetTrigger> : null
-      }
-
+    <Sheet open={props.open} onOpenChange={props.onOpenchange}>
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Comments</SheetTitle>
@@ -57,6 +58,8 @@ export default function Comments(props : CommentsProps) {
             <Button type="submit" variant="default">Comment</Button>
           </form>
         </Form>
+
+        
       </SheetContent>
     </Sheet>
   )

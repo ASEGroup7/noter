@@ -12,15 +12,17 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 
 import { toast } from "sonner";
 import { api } from "@convex/api";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { copyToClipboard } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import Tiptap from "@/components/common/editor/tiptap";
+import { Id } from "@convex/dataModel";
 
 export default function Page() {
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
 
   const user = useUser();
   const router = useRouter();
@@ -29,10 +31,16 @@ export default function Page() {
   if(id === null) router.push("/notes");
 
   const note = useQuery(api.notes.get.id, { id: id as string });
+  const deleteNote = useMutation(api.notes.delete.remove);
   const creatorId = note?.userId;
   const isOwner = creatorId === user?.user?.id;
 
   if(note === undefined) return <PageSkeleton />
+
+  function handleDelete() {
+    deleteNote({ id: id as Id<"notes"> });
+    router.push("/notes");
+  }
 
   return (
     <PageContainer>
@@ -58,22 +66,18 @@ export default function Page() {
             content="Downloads"
           />
           
-          <Comments 
-            id={id}
-            trigger={
-              <CustomTooltip
-                trigger={<><ChatBubbleOvalLeftIcon className="size-4" /><span>{note?.downloads || 0}</span></>}
-                content="Comments"
-              />
-            }
+          <CustomTooltip
+            trigger={<><ChatBubbleOvalLeftIcon className="size-4" /><span>{note?.downloads || 0}</span></>}
+            onClick={() => setIsCommentsOpen(true)}
+            content="Comments"
           />
         </div>
 
         {/* TODO: Add creator information section here. */}
 
         <div className="flex gap-4">
-          <CustomTooltip trigger={<PlusIcon className="size-6" />} onClick={() => console.log("Clicked!")}/>
-          <CustomTooltip trigger={<LinkIcon className="size-5" />} onClick={() => copyToClipboard(window.location.href)} />
+          <CustomTooltip trigger={<span><PlusIcon className="size-6" /></span>} onClick={() => console.log("Clicked!")}/>
+          <CustomTooltip trigger={<span><LinkIcon className="size-5" /></span>} onClick={() => copyToClipboard(window.location.href)} />
           <DropdownMenu>
             <DropdownMenuTrigger>
               <EllipsisHorizontalIcon className="size-6"/>
@@ -89,7 +93,7 @@ export default function Page() {
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               {isOwner ? (
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleDelete}>
                   <span className="text-red-700">Delete note</span>
                 </DropdownMenuItem>
               ) : (
@@ -102,9 +106,15 @@ export default function Page() {
         </div>
       </div>
       {/* Here we display the sanitized HTML */}
-      <Tiptap
-        initialValue={note?.html}
-      />
+      <div className="flex flex-col">
+        {note?.html && (
+          <div className="prose prose-sm sm:prose-base max-w-none">
+            <div dangerouslySetInnerHTML={{ __html: note.html }} />
+          </div>
+        )}
+      </div>
+
+      <Comments open={isCommentsOpen} onOpenchange={setIsCommentsOpen}/>
     </PageContainer>
   )
 }

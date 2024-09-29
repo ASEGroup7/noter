@@ -46,7 +46,7 @@ export default function Note({
   return(
     <Link href={`/notes/view?id=${note?._id}`} className={cn(
       className,
-      "flex",
+      "flex gap-3",
       variant === "horizontal" ? "items-center" : "flex-col",
     )}>
       <Image
