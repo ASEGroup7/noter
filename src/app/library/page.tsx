@@ -26,9 +26,7 @@ export default function Page() {
             onClick={() => router.push("/notes/upload")}
           />
         </div>
-      </div>
-
-      
+      </div>      
     </PageContainer>
   )
 }
