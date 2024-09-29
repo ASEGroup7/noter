@@ -7,7 +7,7 @@ import Text from "@tiptap/extension-text";
 import Heading from "@tiptap/extension-heading";
 import Placeholder from "@/components/common/editor/extensions/placeholder";
 import Details from "@/components/common/editor/extensions/details";
-import DetailsSummary from "@tiptap-pro/extension-details-summary";
+import DetailsSummary from "@tiptap-pro/extension-details-summary"; // Import from Tiptap Pro if that's what you're using
 import DetailsContent from "@tiptap-pro/extension-details-content";
 import Typography from "@tiptap/extension-typography";
 import OrderedList from "@tiptap/extension-ordered-list";
@@ -44,11 +44,16 @@ import NodeRange from "@tiptap-pro/extension-node-range";
 import UniqueID from "@/components/common/editor/extensions/unique-id";
 import FileHandler from "@/components/common/editor/extensions/file-handler";
 
+// Registering the extensions
 const ExtensionHandler = [
   Placeholder,
-  Details,
-  DetailsContent,
-  DetailsSummary,
+  Details, // Main details node
+  DetailsContent, // Content within details
+  DetailsSummary.configure({
+    HTMLAttributes: {
+      class: "details-summary",
+    },
+  }), // Configure DetailsSummary properly
   Document,
   Paragraph,
   Text,
@@ -84,12 +89,12 @@ const ExtensionHandler = [
   Table,
   TableCell,
   TableHeader,
-  TableRow, 
+  TableRow,
   TaskItem,
   TaskList,
   NodeRange,
   UniqueID,
   FileHandler,
-]
+];
 
 export default ExtensionHandler;
