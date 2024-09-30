@@ -28,7 +28,6 @@ export default defineSchema({
     searchField: "tag",
   }),
   comments: defineTable(commentsTableSchema)
-
 });
 
 // "pnpx convex dev" to update schema 
