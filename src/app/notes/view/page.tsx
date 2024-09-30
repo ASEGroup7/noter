@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Comments from "./_components/comments";
-import { Button } from "@/components/ui/button";
 import PageSkeleton from "./_components/pageskeleton";
 import CustomTooltip from "@/components/common/custom-tooltip";
 import PageContainer from "@/components/layout/page-container";
@@ -10,119 +9,84 @@ import { EllipsisHorizontalIcon, PlusIcon, LinkIcon } from "@heroicons/react/24/
 import { StarIcon, ChartBarIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
+import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
+import { useDebouncedCallback } from "use-debounce";
 import { useMutation, useQuery } from "convex/react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { copyToClipboard } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
-import Tiptap from "@/components/common/editor/tiptap";
 import { Id } from "@convex/dataModel";
 import axios from "axios";
 
 export default function Page() {
-  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
-  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
-
-  const user = useUser();
   const router = useRouter();
+  const { user, isLoaded } = useUser();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   if (id === null) router.push("/notes");
-
+  
   const note = useQuery(api.notes.get.id, { id: id as string });
-  const deleteNote = useMutation(api.notes.delete.remove);
-  const creatorId = note?.userId;
-  const isOwner = creatorId === user?.user?.id;
-  const { user, isLoaded } = useUser(); // Get the user and loading state here at the top
-
-  // Mutation to increment likes in the database
   const updateNotesMutation = useMutation(api.notes.put.update);
-
-  // Local state to manage likes (optimistic UI)
+  const deleteNote = useMutation(api.notes.delete.remove);
+  
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [noOfLikes, setNoOfLikes] = useState(note?.stars || 0);
   const [isLiked, setIsLiked] = useState<boolean>(() => {
-    // Check if user, publicMetadata, starredFileId, and id exist before checking includes
-    console.log("has user liked this: ", user?.publicMetadata?.starredFileId);
     if (user?.publicMetadata?.starredFileId && Array.isArray(user.publicMetadata.starredFileId) && id) {
       return user.publicMetadata.starredFileId.includes(id as string);
     }
-    return false; // Default to false if no match
+    return false;
   });  
-
+  
+  const isOwner = note?.userId === user?.id;
+  
   useEffect(() => {
-    // When the note is fetched, update the likes in the state
-    if (note) {
-      setNoOfLikes(note.stars);
-    }
+    if(note) setNoOfLikes(note.stars);
   }, [note]);
 
-  // Function to handle the like click
   const handleLikeClick = async () => {
-    if (!isLoaded || !user) return; // Ensure the user is loaded
+    if (!isLoaded || !user || !id) return;
 
-    if (!isLiked){
-      setNoOfLikes((prevLikes) => prevLikes + 1); // Optimistic update
-    }
-    else {
-      setNoOfLikes((prevLikes) => prevLikes - 1); // Optimistic update
-    }
-    setIsLiked(!isLiked);
+    const newLikeState = !isLiked;
+    const newLikeCount = newLikeState ? noOfLikes + 1 : noOfLikes - 1;
+
+    setIsLiked(newLikeState);
+    setNoOfLikes(newLikeCount);
 
     try {
-      // Call the mutation to update the stars (likes)
-      if (id !=null && !isLiked){
-        await updateNotesMutation({
-          id,
-          stars: (note?.stars || 0) + 1, // Increment the stars in the mutation
-        });  
+      await updateNotesMutation({
+        id,
+        stars: newLikeCount,
+      });
 
-        let currentStarredFileId = user.publicMetadata?.starredFileId || [];
-        const updatedStarredFileId = Array.isArray(currentStarredFileId)
-          ? [...currentStarredFileId, id]
-          : [id]; // Ensure it's an array
-        // Use user.update() for client-side metadata update
-        const { data } = await axios.post("/api/user", {
-          id: user.id,
-          starredFileId: updatedStarredFileId
-        });
-        currentStarredFileId = updatedStarredFileId;
-      }
-      else if (id !=null && isLiked){
-        await updateNotesMutation({
-          id,
-          stars: (note?.stars || 0) - 1, 
-        });  
+      let currentStarredFileId = user.publicMetadata?.starredFileId as string[] || [];
+      const updatedStarredFileId = newLikeState
+        ? [...currentStarredFileId, id]
+        : currentStarredFileId.filter(item => item !== id);
 
-        let currentStarredFileId = user.publicMetadata?.starredFileId || [];
-        const updatedStarredFileId = Array.isArray(currentStarredFileId)
-        ? [...currentStarredFileId.filter(item => item !== id)]
-        : []
-
-        const { data } = await axios.post("/api/user", {
+        await axios.post("/api/user", {
           id: user.id,
           starredFileId: updatedStarredFileId
         });
 
-        currentStarredFileId = updatedStarredFileId;
-      }
-      
-      console.log("StarredFileId updated successfully!");
+        console.log("StarredFileId updated successfully!");
     } catch (error) {
       console.error("Failed to update likes or starredFileId:", error);
-      setIsLiked(!isLiked);
-      setNoOfLikes(noOfLikes - 1);
+
+      setIsLiked(!newLikeState);
+      setNoOfLikes(noOfLikes);
     }
   };
-
-  if (note === undefined) return <PageSkeleton />;
-
+  
   function handleDelete() {
     deleteNote({ id: id as Id<"notes"> });
     router.push("/notes");
   }
-
+  
+  if (note === undefined) return <PageSkeleton />;
   return (
     <PageContainer>
       <h1 className="text-4xl font-bold mt-12">{note?.title}</h1>
@@ -141,15 +105,16 @@ export default function Page() {
           <CustomTooltip
             trigger={
               <>
-                <StarIcon className={`${
-                  isLiked ? "size-6 text-yellow-400" : "size-4"
-                  } transition-all duration-200`
-                } />
-                <span>{noOfLikes}</span>
+                <StarIcon className={cn(
+                  isLiked ? "fill-yellow-400" : "",
+                  "transition-colors duration-200 size-4"
+                )}
+                />
+                <span>{noOfLikes || 0}</span>
               </>
             }
             content="Likes"
-            onClick={handleLikeClick} // Handle click event
+            onClick={handleLikeClick}
           />
           <CustomTooltip
             trigger={
@@ -209,7 +174,7 @@ export default function Page() {
         )}
       </div>
 
-      <Comments open={isCommentsOpen} onOpenchange={setIsCommentsOpen}/>
+      <Comments fileId={id || ""} open={isCommentsOpen} onOpenChange={setIsCommentsOpen} />
     </PageContainer>
   );
 }
