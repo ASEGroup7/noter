@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
+import "katex/dist/katex.min.css";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -27,6 +28,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <body
           className={cn(
             "min-h-screen flex flex-col bg-background antialiased",

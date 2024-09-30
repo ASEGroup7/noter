@@ -1,13 +1,14 @@
 "use client";
 
-import Note from "./note";
+// import Note from "./note";
+import Note from "@/components/common/note";
 import NoteSkeleton from "./noteskeleton";
 
 import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
 import { useRef } from "react";
 import { usePaginatedQuery } from "convex/react";
-import useScroll from "@/components/hooks/useScroll";
+import { useScroll } from "@/components/hooks/useScroll";
 
 export default function NotesSection({ className }: { className?: string }) {
   const notesRef = useRef<HTMLDivElement | null>(null);
@@ -35,7 +36,8 @@ export default function NotesSection({ className }: { className?: string }) {
         </>
       ) : null}
       {notes.map((note) => (
-        <Note key={note._id} {...note} />
+        // <Note key={note._id} {...note} />
+        <Note key={note._id} note={note} />
       ))}
       
     </div>
