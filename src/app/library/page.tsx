@@ -16,8 +16,6 @@ export default function Page() {
 
   if(user.isLoaded && !user.isSignedIn) router.push("/");
 
-  console.log("variable: ", user.user?.publicMetadata.starredFileId as Array<string>);
-
   return(
     <PageContainer>
       <div className="flex items-center gap-4 py-10 border-b">
