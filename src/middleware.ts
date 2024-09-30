@@ -8,7 +8,7 @@ export default clerkMiddleware(
       auth().protect();
     }
   },
-  {
+  { 
     debug: false,
   }
 );

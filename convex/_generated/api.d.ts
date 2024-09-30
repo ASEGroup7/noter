@@ -17,6 +17,7 @@ import type {
 } from "convex/server";
 import type * as comments_get from "../comments/get.js";
 import type * as comments_put from "../comments/put.js";
+import type * as notes_delete from "../notes/delete.js";
 import type * as notes_get from "../notes/get.js";
 import type * as notes_put from "../notes/put.js";
 import type * as tags_get from "../tags/get.js";
@@ -32,6 +33,7 @@ import type * as tags_get from "../tags/get.js";
 declare const fullApi: ApiFromModules<{
   "comments/get": typeof comments_get;
   "comments/put": typeof comments_put;
+  "notes/delete": typeof notes_delete;
   "notes/get": typeof notes_get;
   "notes/put": typeof notes_put;
   "tags/get": typeof tags_get;

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function useScroll(
+export function useScroll(
   ref : React.RefObject<HTMLElement>,
   callback : () => void,
 ) {

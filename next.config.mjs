@@ -4,6 +4,18 @@ const nextConfig = {
     remotePatterns: [
       {
         hostname: "img.clerk.com"
+      },
+      {
+        hostname: "utfs.io"
+      }
+    ]
+  },
+  async redirects() {
+    return [
+      {
+        source: "/admin",
+        destination: "/admin/users",
+        permanent: true,
       }
     ]
   }

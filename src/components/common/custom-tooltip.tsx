@@ -2,7 +2,7 @@ import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip
 
 import { cn } from "@/lib/utils";
 
-interface CustomTooltipProps   {
+export interface CustomTooltipProps   {
   trigger: React.ReactNode | React.ReactNode[];
   content?: React.ReactNode | React.ReactNode[] | undefined;
   className?: string;

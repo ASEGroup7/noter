@@ -7,24 +7,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetFooter, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
-import { z } from "zod";
-import axios from "axios";
-import { list } from "postcss";
+import { boolean, z } from "zod";
 import { api } from "@convex/api";
 import { useUser } from "@clerk/nextjs";
-import { Doc } from "@convex/dataModel";
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { User } from "@clerk/clerk-sdk-node";
 import { useQuery, useMutation } from "convex/react"
 import { zodResolver } from "@hookform/resolvers/zod";
 
 
 interface CommentsProps {
-  fileId: string; 
-  open: boolean;
-  onOpenChange: (state: boolean) => void;
+  fileId: string;
+  open?: boolean;
+  onOpenChange?: (state: boolean) => void;
 }
 
 const formSchema = z.object({
@@ -39,6 +35,7 @@ export default function Comments({ fileId, open, onOpenChange } : CommentsProps)
     resolver: zodResolver(formSchema),
   })
 
+
   const newComment = useMutation(api.comments.put.create);
   const allComments = useQuery(api.comments.get.list, { fileId: fileId });
 
@@ -47,7 +44,7 @@ export default function Comments({ fileId, open, onOpenChange } : CommentsProps)
 
   //TODO : Fetch comments and display them.
 
-  function handleSubmit() {
+  function handleSubmit(values: z.infer<typeof formSchema>) {
     
   }
 
@@ -79,6 +76,8 @@ export default function Comments({ fileId, open, onOpenChange } : CommentsProps)
             <Button type="submit" variant="default">Comment</Button>
           </form>
         </Form>
+
+        
       </SheetContent>
     </Sheet>
   );
