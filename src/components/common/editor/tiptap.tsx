@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import ExtensionHandler from "./extensions/extension-handler";
 import { useEditor, EditorContent, HTMLContent } from "@tiptap/react";
-import { ToggleGroupDemo } from "./menu-bar";
+import { MenuBar } from "./menu-bar";
 
 export default function Tiptap({
   initialValue,
@@ -40,32 +40,33 @@ export default function Tiptap({
   });
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
+    
     // Check if the user is inside a CodeBlock
     if (editor?.isActive('codeBlock')) {
       if (event.key === 'Tab') {
-        event.preventDefault() // Prevent default tab behavior
-        editor?.commands.insertContent('  ') // Indent with spaces inside code block
+        event.preventDefault(); // Prevent default tab behavior
+        editor?.commands.insertContent('  '); // Indent with spaces inside code block
       }
-      return // Exit early since we handled the Tab key for CodeBlock
+      return; // Exit early since we handled the Tab key for CodeBlock
     }
 
     // Handle Tab key for sinking the list item
     if (event.key === 'Tab' && !event.shiftKey && editor?.isActive('listItem')) {
-      event.preventDefault()
-      editor?.chain().focus().sinkListItem('listItem').run()
+      event.preventDefault();
+      editor?.chain().focus().sinkListItem('listItem').run();
     }
 
     // Handle Shift+Tab for lifting the list item
     if (event.key === 'Tab' && event.shiftKey && editor?.isActive('listItem')) {
-      event.preventDefault()
-      editor?.chain().focus().liftListItem('listItem').run()
+      event.preventDefault();
+      editor?.chain().focus().liftListItem('listItem').run();
     }
-  }
+  };
 
   return (
     <>
       {/* Pass the editor instance to MenuBar */}
-      <ToggleGroupDemo editor={editor} />
+      <MenuBar editor={editor} />
       <EditorContent editor={editor} onKeyDown={handleKeyDown} />
     </>
   );

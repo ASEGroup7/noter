@@ -46,7 +46,7 @@ import FileHandler from "@/components/common/editor/extensions/file-handler";
 
 // Registering the extensions
 const ExtensionHandler = [
-  Placeholder,
+  Placeholder, 
   Details, // Main details node
   DetailsContent, // Content within details
   DetailsSummary.configure({
@@ -54,44 +54,46 @@ const ExtensionHandler = [
       class: "details-summary",
     },
   }), // Configure DetailsSummary properly
-  Document,
-  Paragraph,
+  Document, // not needed for menu bar
+  Paragraph, // not needed for menu bar
   Text,
-  BulletList,
-  ListItem,
-  Blockquote,
-  Heading,
-  Underline,
+  BulletList, // added
+  ListItem, // added
+  Blockquote, // add in a menu tab 
+  Heading, // added
+  Underline, // added
   Typography,
-  OrderedList,
-  CodeBlockLowLight,
-  History,
-  Mathematics,
-  Bold,
-  Code,
-  Italic,
-  Strike,
+  OrderedList, // added 
+  CodeBlockLowLight, // add in a menu tab 
+  History, 
+  Mathematics, 
+  Bold, // added
+  Code, // added
+  Italic, // added
+  Strike, // added
   Gapcursor,
   Dropcursor,
   Link,
   Emoji,
-  Hardbreak,
-  HorizontalRule,
-  Highlight,
+  Hardbreak, // not needed for menu bar
+  HorizontalRule, // added
+  Highlight.configure({
+    multicolor: true, // Allow multiple highlight colors
+  }), 
   Image,
-  Color,
-  TextStyle,
-  FontFamily,
+  Color, // added
+  TextStyle, // added
+  FontFamily, // added
   Subscript,
   Superscript,
   CharacterCount,
-  TextAlign,
-  Table,
-  TableCell,
+  TextAlign, // added
+  Table.configure({ resizable: true }),
+  TableCell, 
   TableHeader,
   TableRow,
-  TaskItem,
-  TaskList,
+  TaskItem, // added
+  TaskList, // added
   NodeRange,
   UniqueID,
   FileHandler,
