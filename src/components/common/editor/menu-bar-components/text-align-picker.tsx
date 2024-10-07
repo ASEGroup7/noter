@@ -58,11 +58,11 @@ const TextAlignPicker: React.FC<TextAlignPickerProps> = ({ editor }) => {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded hover:bg-gray-200 hover transition-colors flex items-center justify-between w-full"
+        className="p-1 rounded hover:bg-gray-200 hover transition-colors flex items-center justify-between"
       >
         {/* Display the current selected icon */}
         {React.createElement(getIconComponent(selectedAlign), { className: 'h-4 w-4' })}
-        <ChevronDown className="h-4 w-4 ml-1" />
+        <ChevronDown className="h-3 w-3 ml-1" />
       </button>
 
       {/* Dropdown Menu */}
@@ -78,7 +78,7 @@ const TextAlignPicker: React.FC<TextAlignPickerProps> = ({ editor }) => {
                     selectedAlign === option.value ? 'bg-gray-200' : ''
                   }`}
                 >
-                  {React.createElement(option.icon, { className: 'h-4 w-4 mr-2' })}
+                  {React.createElement(option.icon, { className: 'h-3 w-3 mr-2' })}
                   {option.label}
                 </button>
               </li>

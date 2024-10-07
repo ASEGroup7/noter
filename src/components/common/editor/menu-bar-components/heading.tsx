@@ -72,7 +72,7 @@ const Heading: React.FC<HeadingProps> = ({ editor }) => {
         className="inline-flex justify-between items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none"
       >
         {selectedOption.label}
-        <ChevronDown className="w-4 h-4 ml-2" />
+        <ChevronDown className="w-3 h-3 ml-2" />
       </button>
 
       {/* Dropdown Menu */}

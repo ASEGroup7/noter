@@ -216,6 +216,11 @@
   }
 }
 
+/* Disable text dragging in the editor */
+.tiptap-editor {
+  user-select: none; /* Prevent text selection */
+  -webkit-user-drag: none; /* Disable dragging on webkit browsers */
+}
 
 .tiptap {
   :first-child {
@@ -440,27 +445,57 @@
 }
 
 
-.tiptaptable {
+.tiptap table {
   border-collapse: collapse;
   width: 100%;
   margin: 1rem 0;
+  table-layout: fixed; /* Ensures consistent column width */
 }
 
-.tiptap th, .tiptap-editor td {
-  border: 1px solid #ddd;
+.tiptap th,
+.tiptap td {
+  border: 1px solid #383838;
   padding: 8px;
   text-align: left;
+  vertical-align: top; /* Aligns all content at the top */
+  width: 50%; /* Makes sure both headers and cells share the same width */
+  box-sizing: border-box; /* Includes padding and borders in the width */
+  white-space: normal; /* Allows content to wrap if necessary */
+  overflow: hidden; /* Ensures overflow content doesn’t affect layout */
 }
 
 .tiptap th {
-  background-color: #f4f4f4;
+  background-color: #d7d7d7;
   font-weight: bold;
 }
 
-.tiptaptd {
-  background-color: #fff;
+.tiptap td {
+  background-color: #f9f9f9;
 }
 
 .tiptap table tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #ffffff;
 }
+
+.tiptap .column-resize-handle {
+  background-color: var(--purple);
+  bottom: -2px;
+  pointer-events: none;
+  position: absolute;
+  right: -2px;
+  top: 0;
+  width: 4px;
+  cursor: ew-resize; /* Sets the cursor to indicate horizontal resizing */
+}
+
+.tiptap .tableWrapper {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.selectedCell {
+  background-color: rgba(173, 216, 230, 0.5) !important; /* Use !important if other rules are overriding */
+}
+
+
+

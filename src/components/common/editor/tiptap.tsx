@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import ExtensionHandler from "./extensions/extension-handler";
 import { useEditor, EditorContent, HTMLContent } from "@tiptap/react";
 import { MenuBar } from "./menu-bar";
+import TableContextMenu from "./menu-bar-components/table-context-menu"; // Import the TableContextMenu component
 
 export default function Tiptap({
   initialValue,
@@ -23,6 +24,8 @@ export default function Tiptap({
     editable: editable,
     autofocus: true,
     onUpdate: ({ editor }) => {
+      // Fix tables after any update
+      editor.chain().focus().fixTables().run();
       // Log the current content in HTML format
       console.log(editor.getHTML());
 
@@ -40,7 +43,6 @@ export default function Tiptap({
   });
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    
     // Check if the user is inside a CodeBlock
     if (editor?.isActive('codeBlock')) {
       if (event.key === 'Tab') {
@@ -68,6 +70,8 @@ export default function Tiptap({
       {/* Pass the editor instance to MenuBar */}
       <MenuBar editor={editor} />
       <EditorContent editor={editor} onKeyDown={handleKeyDown} />
+      {/* Render the TableContextMenu component and pass the editor instance */}
+      {editor && <TableContextMenu editor={editor} />}
     </>
   );
 }
