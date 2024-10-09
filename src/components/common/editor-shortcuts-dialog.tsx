@@ -1,40 +1,43 @@
-import { Button } from "@/components/ui/button"
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-
-import React from 'react'
+import { CircleHelp } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import React from 'react';
 
 const KeyboardShortcut = ({ children }: { children: React.ReactNode }) => {
   return (
     <kbd className="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
       {children}
     </kbd>
-  )
-}
+  );
+};
 
 const shortcuts = [
-  { description: 'Bold', shortcut: 'Ctrl + B' },
-  { description: 'Italic', shortcut: 'Ctrl + I' },
-  { description: 'Strikethrough', shortcut: 'Ctrl + Shift + X' },
+  { description: 'Bold', shortcut: 'Ctrl + B or **content**' },
+  { description: 'Italic', shortcut: 'Ctrl + I or *content*' },
+  { description: 'Underline', shortcut: 'Ctrl + U' },
+  { description: 'Strikethrough', shortcut: 'Ctrl + Shift + X or ~~content~~' },
+  { description: 'Highlight', shortcut: '==content==' },
+  { description: 'Blockquote', shortcut: '> ' },
   { description: 'Heading 1', shortcut: '# ' },
   { description: 'Heading 2', shortcut: '## ' },
   { description: 'Heading 3', shortcut: '### ' },
   { description: 'Unordered List', shortcut: '- ' },
   { description: 'Ordered List', shortcut: '1. ' },
-  { description: 'Blockquote', shortcut: '> ' },
+  { description: 'Task List', shortcut: '[ ] (unchecked) or [x] (checked)' },
   { description: 'Code', shortcut: 'Ctrl+E' },
   { description: 'Code Block', shortcut: '```' },
   { description: 'Link', shortcut: 'Ctrl+K' },
   { description: 'Image', shortcut: '![](url)' },
   { description: 'Horizontal Rule', shortcut: '---' },
-  { description: 'Task List', shortcut: '- [ ] ' },
-]
+  { description: 'Math Block', shortcut: '$content$' },
+];
 
 export default function MarkdownShortcutsDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-          <QuestionMarkCircleIcon className="size-10 absolute bottom-5 right-5" />
+        <button className="fixed bottom-5 right-5 p-2 rounded-full hover:bg-gray-200 transition-colors">
+          <CircleHelp className="h-6 w-6 text-gray-800 dark:text-gray-100" />
+        </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px]">
         <DialogHeader>
@@ -50,5 +53,5 @@ export default function MarkdownShortcutsDialog() {
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

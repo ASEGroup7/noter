@@ -7,7 +7,7 @@ import Text from "@tiptap/extension-text";
 import Heading from "@tiptap/extension-heading";
 import Placeholder from "@/components/common/editor/extensions/placeholder";
 import Details from "@/components/common/editor/extensions/details";
-import DetailsSummary from "@tiptap-pro/extension-details-summary";
+import DetailsSummary from "@tiptap-pro/extension-details-summary"; // Import from Tiptap Pro if that's what you're using
 import DetailsContent from "@tiptap-pro/extension-details-content";
 import Typography from "@tiptap/extension-typography";
 import OrderedList from "@tiptap/extension-ordered-list";
@@ -44,52 +44,59 @@ import NodeRange from "@tiptap-pro/extension-node-range";
 import UniqueID from "@/components/common/editor/extensions/unique-id";
 import FileHandler from "@/components/common/editor/extensions/file-handler";
 
+// Registering the extensions
 const ExtensionHandler = [
-  Placeholder,
-  Details,
-  DetailsContent,
-  DetailsSummary,
-  Document,
-  Paragraph,
+  Placeholder, 
+  Details, // Main details node
+  DetailsContent, // Content within details
+  DetailsSummary.configure({
+    HTMLAttributes: {
+      class: "details-summary",
+    },
+  }), // Configure DetailsSummary properly
+  Document, // not needed for menu bar
+  Paragraph, // not needed for menu bar
   Text,
-  BulletList,
-  ListItem,
-  Blockquote,
-  Heading,
-  Underline,
+  BulletList, // added
+  ListItem, // added
+  Blockquote, // add in a menu tab 
+  Heading, // added
+  Underline, // added
   Typography,
-  OrderedList,
-  CodeBlockLowLight,
-  History,
-  Mathematics,
-  Bold,
-  Code,
-  Italic,
-  Strike,
+  OrderedList, // added 
+  CodeBlockLowLight, // add in a menu tab 
+  History, 
+  Mathematics, 
+  Bold, // added
+  Code, // added
+  Italic, // added
+  Strike, // added
   Gapcursor,
   Dropcursor,
   Link,
   Emoji,
-  Hardbreak,
-  HorizontalRule,
-  Highlight,
+  Hardbreak, // not needed for menu bar
+  HorizontalRule, // added
+  Highlight.configure({
+    multicolor: true, // Allow multiple highlight colors
+  }), 
   Image,
-  Color,
-  TextStyle,
-  FontFamily,
+  Color, // added
+  TextStyle, // added
+  FontFamily, // added
   Subscript,
   Superscript,
   CharacterCount,
-  TextAlign,
-  Table,
-  TableCell,
+  TextAlign, // added
+  Table.configure({ resizable: true }),
+  TableCell, 
   TableHeader,
-  TableRow, 
-  TaskItem,
-  TaskList,
+  TableRow,
+  TaskItem, // added
+  TaskList, // added
   NodeRange,
   UniqueID,
   FileHandler,
-]
+];
 
 export default ExtensionHandler;
