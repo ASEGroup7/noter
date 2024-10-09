@@ -121,23 +121,23 @@ export function MenuBar({ editor }: { editor: Editor | null }) {
         {/* Color Picker and Highlight Picker */}
         <ColorPicker editor={editor} />
         <HighlightPicker editor={editor} />
+        <TableGridSelector editor={editor} />
 
         {/* Render regular buttons */}
         {buttonItems.map((item, index) => (
           <button
-            key={index}
-            aria-label={item.ariaLabel}
-            onClick={item.onClick}
+          key={index}
+          aria-label={item.ariaLabel}
+          onClick={item.onClick}
             className={buttonStyle}
             title={item.ariaLabel}
-          >
+            >
             {item.icon}
           </button>
         ))}
 
         {/* Text Alignment and Table Grid Selector */}
         <TextAlignPicker editor={editor} />
-        <TableGridSelector editor={editor} />
         
         <MarkdownShortcutsDialog/>
         
