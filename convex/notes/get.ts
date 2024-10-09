@@ -8,6 +8,7 @@ export const list = query({
     paginationOpts: paginationOptsValidator,
     fulltext: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
+    fileId: v.optional(v.array(v.string()))
   },
   handler: async (ctx, args) => {
     let results;
@@ -24,9 +25,14 @@ export const list = query({
         .paginate(args.paginationOpts)
     }
 
-    if(args.tags === undefined || args.tags.length === 0) return results;
+    if(args.tags !== undefined && args.tags.length !== 0){
+      results.page = results.page.filter(note => args.tags?.some(tag => note.tags.includes(tag)));
+    }
 
-    results.page = results.page.filter(note => args.tags?.some(tag => note.tags.includes(tag)));
+    if(args.fileId !== undefined && args.fileId.length !== 0){
+      results.page = results.page.filter(note => args.fileId?.some(fileId => note._id.includes(fileId)));
+    }
+    
     return results;
   }
 })
@@ -38,5 +44,19 @@ export const id = query({
   handler: async (ctx, args) => {
     if(!ctx.db.normalizeId("notes", args.id)) return null;
     return await ctx.db.get(args.id as Id<"notes">);
+  }
+})
+
+export const userId = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+    userId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const noteList = await ctx.db.query("notes")
+      .filter((q) => q.eq(q.field("userId"), args.userId))
+      .paginate(args.paginationOpts);
+
+    return noteList;
   }
 })

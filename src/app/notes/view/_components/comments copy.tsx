@@ -1,26 +1,28 @@
 "use client"
 
-import CommentBubble from "./comment-bubble";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetFooter, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
-import { boolean, z } from "zod";
+import { z } from "zod";
+import axios from "axios";
+import { list } from "postcss";
 import { api } from "@convex/api";
 import { useUser } from "@clerk/nextjs";
 import { useForm } from "react-hook-form"
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useQuery, useMutation } from "convex/react"
+import { User } from "@clerk/clerk-sdk-node";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery, usePaginatedQuery, useMutation } from "convex/react"
 
 
 interface CommentsProps {
-  fileId: string;
-  open?: boolean;
-  onOpenChange?: (state: boolean) => void;
+  fileId: string; 
+  open: boolean;
+  onOpenChange: (state: boolean) => void;
 }
 
 const formSchema = z.object({
@@ -28,6 +30,7 @@ const formSchema = z.object({
 })
 
 export default function Comments({ fileId, open, onOpenChange } : CommentsProps) {
+  
 
   const user = useUser();
   const router = useRouter();
@@ -35,17 +38,24 @@ export default function Comments({ fileId, open, onOpenChange } : CommentsProps)
     resolver: zodResolver(formSchema),
   })
 
+  const newComment = useMutation(api.comments.puts.create);
 
-  const newComment = useMutation(api.comments.put.create);
-  const allComments = useQuery(api.comments.get.list, { fileId: fileId });
+  const { 
+    results : comments,
+    status,
+    loadMore
+  } = usePaginatedQuery(
+    api.comments.get.list, 
+    { fileId: fileId as string }, 
+    { initialNumItems: 10 }
+  );
 
-  const [localComments, setLocalComments] = useState(allComments);
-  const [localCommentElements, setLocalCommentElements] = useState<React.ReactNode[]>([]);
-
-  //TODO : Fetch comments and display them.
-
-  function handleSubmit(values: z.infer<typeof formSchema>) {
-    
+  async function handleSubmit(values: z.infer<typeof formSchema>) {
+    newComment({
+      fileId: fileId || "",
+      userId: user?.user?.id || "",
+      content: values.comment
+    }).then(router.refresh())
   }
 
   return(
@@ -56,7 +66,22 @@ export default function Comments({ fileId, open, onOpenChange } : CommentsProps)
         </SheetHeader>
 
         <div className="space-y-2">
-          {localCommentElements}
+          {comments.map(async (comment) => {
+            const userInformation  = await axios.get("/api/user", {
+              params: { id: comment.userId }
+            })
+
+            const userData : User = userInformation.data.user;
+
+            return <div>
+              <Avatar>
+                <AvatarImage src={userData.imageUrl} className="w-20" />
+                <AvatarFallback />
+                <span>{userData.username}</span>  
+              </Avatar>
+             {comment.content}
+            </div>;
+          })}
         </div>
 
         <Form {...form}>
@@ -76,8 +101,6 @@ export default function Comments({ fileId, open, onOpenChange } : CommentsProps)
             <Button type="submit" variant="default">Comment</Button>
           </form>
         </Form>
-
-        
       </SheetContent>
     </Sheet>
   );

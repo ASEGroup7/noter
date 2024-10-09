@@ -36,7 +36,7 @@ export default function Tiptap({
       attributes: {
         class: cn(
           className,
-          "min-h-full min-w-full prose prose-sm sm:prose-base"
+          "prose prose-sm sm:prose-base w-full max-w-none"
         ),
       },
     },

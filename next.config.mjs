@@ -9,6 +9,15 @@ const nextConfig = {
         hostname: "utfs.io"
       }
     ]
+  },
+  async redirects() {
+    return [
+      {
+        source: "/admin",
+        destination: "/admin/users",
+        permanent: true,
+      }
+    ]
   }
 };
 

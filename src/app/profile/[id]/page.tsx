@@ -1,5 +1,6 @@
 "use client"
 
+import Note from "@/components/common/note";
 import EditForm from "./_components/editform";
 import { Skeleton } from "@/components/ui/skeleton";
 import PageContainer from "@/components/layout/page-container";
@@ -9,11 +10,14 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 import axios from "axios";
+import { api } from "@convex/api";
 import { format } from "date-fns";
 import { useUser } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
-import { useState, useEffect } from "react";
 import { User } from "@clerk/clerk-sdk-node";
+import { usePaginatedQuery } from "convex/react";
+import { useState, useEffect, useRef } from "react";
+import { useScroll } from "@/components/hooks/useScroll";
 import { toPascalCase, copyToClipboard } from "@/lib/utils";
 
 export default function Page({
@@ -23,10 +27,12 @@ export default function Page({
     id: string;
   };
 }) {
+  const notesRef = useRef<HTMLDivElement | null>(null);
   const [profileUser, setProfileUser] = useState<User | null>(null);
 
   const { user: currentUser } = useUser();
   const isProfileOwner = params.id === currentUser?.id;
+  const { results, status, loadMore } = usePaginatedQuery(api.notes.get.userId, { userId: params.id ? params.id : "skip" }, { initialNumItems: 5 })
 
   if (!params.id) notFound();
 
@@ -36,7 +42,7 @@ export default function Page({
         const { data } = await axios.get("/api/user", {
           params: { id: params.id },
         });
-        console.log(data.user);
+
         setProfileUser(data.user);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
@@ -46,10 +52,11 @@ export default function Page({
     getUserData();
   }, [params.id]);
 
-  // TODO: Add skeleton for when user is still loading.
+  useScroll(notesRef, () => loadMore(5));
+
   return (
     <PageContainer>
-      <div className="flex items-center gap-4 py-10 border-b">
+      <div ref={notesRef} className="flex items-center gap-4 py-10 border-b">
         <div className="flex items-center justify-left gap-4">
           <Avatar className="h-[80px] w-[80px]">
             <AvatarImage src={profileUser?.imageUrl} />
@@ -127,6 +134,9 @@ export default function Page({
           </DialogContent>
         </Dialog>
       </div>
+      {
+        results.map((note) => <Note key={note._id} note={note} />)
+      }
     </PageContainer>
   );
 }

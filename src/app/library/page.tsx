@@ -7,6 +7,7 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import NotesSection from "./_components/notessection";
 
 export default function Page() {
 
@@ -27,8 +28,9 @@ export default function Page() {
           />
         </div>
       </div>
-
-      
+      <div>
+        <NotesSection starredFileId={user.user?.publicMetadata.starredFileId as Array<string>}/>
+      </div>
     </PageContainer>
   )
 }

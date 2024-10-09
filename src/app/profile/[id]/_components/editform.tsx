@@ -26,36 +26,41 @@ const formSchema = z.object({
 export default function EditForm(props: EditFormProps) {
   const user = useUser();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  if (!user.isLoaded) return <span>Loading...</span>;
-
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
-
+  
+  // We got issues here...
   function handleSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
 
+    user?.user?.update({
+      username: values.username,
+      primaryEmailAddressId: values.email,
+    }).then(res => console.log(res)).catch((e) => console.error(e))
+  }
+  
   async function handleImageUpdate(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-
+    
     user.user
-      ?.setProfileImage({ file })
-      .then((res) => console.log(res))
+    ?.setProfileImage({ file })
+    .then((res) => console.log(res))
       .catch((e) => console.log(e.errors));
-  }
-
-  function handleImageDelete() {
-    user.user
+    }
+    
+    function handleImageDelete() {
+      user.user
       ?.setProfileImage({ file: null })
       .then((res) => console.log(res))
       .catch((e) => console.error(e.errors));
-  }
-
-  //TODO : Add bio functionality
-  return (
-    <Form {...form}>
+    }
+    
+    if (!user.isLoaded) return <span>Loading...</span>;
+    //TODO : Add bio functionality
+    return (
+      <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FormLabel className="font-bold">Photo</FormLabel>
         <div className="flex flex-row items-center gap-4">
