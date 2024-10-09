@@ -1,7 +1,7 @@
 "use client" 
 
 import Note from "@/components/common/note";
-import PageContainer from "@/components/layout/pagecontainer";
+import PageContainer from "@/components/layout/page-container";
 
 import { api } from "@convex/api";
 import { useScroll } from "@/components/hooks/useScroll";
@@ -24,7 +24,7 @@ export default function Page({ params } : { params : { id : string }}) {
 
   return(
     <PageContainer>
-
+      
     </PageContainer>
   )
 }
