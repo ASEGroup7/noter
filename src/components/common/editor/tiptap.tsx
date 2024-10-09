@@ -1,8 +1,10 @@
-"use client"
+"use client";
 
 import { cn } from "@/lib/utils";
 import ExtensionHandler from "./extensions/extension-handler";
 import { useEditor, EditorContent, HTMLContent } from "@tiptap/react";
+import { MenuBar } from "./menu-bar";
+import TableContextMenu from "./menu-bar-components/table-context-menu"; // Import the TableContextMenu component
 
 export default function Tiptap({
   initialValue,
@@ -10,20 +12,24 @@ export default function Tiptap({
   editable = false,
   className,
 }: {
-  onChange?: (htmlContent : HTMLContent) => void,
-  initialValue?: string,
-  editable?: boolean,
-  className?: string,
+  onChange?: (htmlContent: HTMLContent) => void;
+  initialValue?: string;
+  editable?: boolean;
+  className?: string;
 }) {
-  
+  // Initialize the editor
   const editor = useEditor({
-    immediatelyRender: false,
-    shouldRerenderOnTransaction: false,
-    autofocus: true,
     extensions: ExtensionHandler,
     content: initialValue,
     editable: editable,
+    autofocus: true,
     onUpdate: ({ editor }) => {
+      // Fix tables after any update
+      editor.chain().focus().fixTables().run();
+      // Log the current content in HTML format
+      console.log(editor.getHTML());
+
+      // Trigger the onChange callback if it exists
       onChange && onChange(editor.getHTML());
     },
     editorProps: {
@@ -36,9 +42,36 @@ export default function Tiptap({
     },
   });
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    // Check if the user is inside a CodeBlock
+    if (editor?.isActive('codeBlock')) {
+      if (event.key === 'Tab') {
+        event.preventDefault(); // Prevent default tab behavior
+        editor?.commands.insertContent('  '); // Indent with spaces inside code block
+      }
+      return; // Exit early since we handled the Tab key for CodeBlock
+    }
+
+    // Handle Tab key for sinking the list item
+    if (event.key === 'Tab' && !event.shiftKey && editor?.isActive('listItem')) {
+      event.preventDefault();
+      editor?.chain().focus().sinkListItem('listItem').run();
+    }
+
+    // Handle Shift+Tab for lifting the list item
+    if (event.key === 'Tab' && event.shiftKey && editor?.isActive('listItem')) {
+      event.preventDefault();
+      editor?.chain().focus().liftListItem('listItem').run();
+    }
+  };
+
   return (
     <>
-      <EditorContent editor={editor}/>
+      {/* Pass the editor instance to MenuBar */}
+      <MenuBar editor={editor} />
+      <EditorContent editor={editor} onKeyDown={handleKeyDown} />
+      {/* Render the TableContextMenu component and pass the editor instance */}
+      {editor && <TableContextMenu editor={editor} />}
     </>
   );
 }
