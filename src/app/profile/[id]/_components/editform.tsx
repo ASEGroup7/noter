@@ -31,8 +31,13 @@ export default function EditForm(props: EditFormProps) {
     resolver: zodResolver(formSchema),
   });
   
+  // We got issues here...
   function handleSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+
+    user?.user?.update({
+      username: values.username,
+      primaryEmailAddressId: values.email,
+    }).then(res => console.log(res)).catch((e) => console.error(e))
   }
   
   async function handleImageUpdate(e: React.ChangeEvent<HTMLInputElement>) {

@@ -40,3 +40,17 @@ export const id = query({
     return await ctx.db.get(args.id as Id<"notes">);
   }
 })
+
+export const userId = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+    userId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const noteList = await ctx.db.query("notes")
+      .filter((q) => q.eq(q.field("userId"), args.userId))
+      .paginate(args.paginationOpts);
+
+    return noteList;
+  }
+})
