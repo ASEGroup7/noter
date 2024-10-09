@@ -29,22 +29,6 @@ export default function TableContextMenu({ editor }: TableContextMenuProps) {
     color: '#333', // Slightly darker font color on hover
   };
 
-  // Handle the right-click event on the table cell
-  const handleContextMenu = (event: MouseEvent) => {
-    event.preventDefault();
-
-    // Check if the editor is active and if the user clicked on a table cell
-    const target = event.target as HTMLElement;
-    const isTableCell = target && (target.closest('td') || target.closest('th'));
-
-    if (editor && isTableCell) {
-      setPosition({ x: event.clientX, y: event.clientY });
-      setMenuVisible(true);
-    } else {
-      setMenuVisible(false);
-    }
-  };
-
   // Close the context menu when clicking outside
   useEffect(() => {
     const handleClickOutside = () => setMenuVisible(false);
@@ -55,6 +39,23 @@ export default function TableContextMenu({ editor }: TableContextMenuProps) {
   // Attach the context menu event handler to the editor’s content area
   useEffect(() => {
     const editorDom = editor?.view?.dom;
+    
+  // Handle the right-click event on the table cell
+    const handleContextMenu = (event: MouseEvent) => {
+      event.preventDefault();
+
+      // Check if the editor is active and if the user clicked on a table cell
+      const target = event.target as HTMLElement;
+      const isTableCell = target && (target.closest('td') || target.closest('th'));
+
+      if (editor && isTableCell) {
+        setPosition({ x: event.clientX, y: event.clientY });
+        setMenuVisible(true);
+      } else {
+        setMenuVisible(false);
+      }
+    };
+
     if (editorDom) {
       editorDom.addEventListener('contextmenu', handleContextMenu);
     }
