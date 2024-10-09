@@ -62,7 +62,7 @@ const TableGridSelector: React.FC<TableGridSelectorProps> = ({ editor }) => {
       {/* Table grid UI */}
       {isOpen && (
         <div
-          className="absolute z-10 mt-2 p-3 bg-white border border-gray-300 shadow-lg rounded-lg"
+          className="absolute z-50 mt-2 p-3 bg-white border border-gray-300 shadow-lg rounded-lg"
           style={{ minWidth: '200px', minHeight: '200px' }} // Ensure enough space for at least 5x5 grid
         >
           <div className="grid grid-cols-[repeat(7,_minmax(0,_20px))] gap-1 p-2">
