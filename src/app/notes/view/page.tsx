@@ -20,6 +20,7 @@ import { copyToClipboard } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { Id } from "@convex/dataModel";
 import axios from "axios";
+import Tiptap from "@/components/common/editor/tiptap";
 
 export default function Page() {
   const router = useRouter();
@@ -136,7 +137,6 @@ export default function Page() {
         {/* TODO: Add creator information section here. */}
 
         <div className="flex gap-4">
-          <CustomTooltip trigger={<PlusIcon className="size-6" />} onClick={() => console.log("Clicked!")} />
           <CustomTooltip trigger={<LinkIcon className="size-5" />} onClick={() => copyToClipboard(window.location.href)} />
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -167,11 +167,14 @@ export default function Page() {
       </div>
       {/* Here we display the sanitized HTML */}
       <div className="flex flex-col">
-        {note?.html && (
-          <div className="prose prose-sm sm:prose-base max-w-none">
-            <div dangerouslySetInnerHTML={{ __html: note.html }} />
-          </div>
-        )}
+        {
+          note?.html && (
+            <Tiptap
+              initialValue={note.html}
+              editable={false}
+            />
+          )
+        }
       </div>
 
       <Comments fileId={id || ""} open={isCommentsOpen} onOpenChange={setIsCommentsOpen} />

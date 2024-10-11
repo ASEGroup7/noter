@@ -12,6 +12,8 @@ import { useScroll } from "@/components/hooks/useScroll";
 
 export default function NotesSection({ className }: { className?: string }) {
   const notesRef = useRef<HTMLDivElement | null>(null);
+
+
   const {
     results: notes,
     status,
