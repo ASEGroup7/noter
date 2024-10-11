@@ -22,7 +22,7 @@ import { useSearch } from "../providers/SearchContextProvider";
 import { Upload } from 'lucide-react';
 
 export function Navbar() {
-  const { searchValue, setSearchValue } = useSearch();
+  const [ searchValue, setSearchValue ] = useState(""); 
   const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
   const [ isDialogOpen, setIsDialogOpen ] = useState(false);
   const setDebouncedSearchValue = useDebouncedCallback(setSearchValue, 300);
@@ -30,13 +30,6 @@ export function Navbar() {
     api.notes.get.list,
     { fulltext: searchValue },
     { initialNumItems: 5 }
-  )
-
-  const tags = useQuery(
-    api.tags.get.list,
-    {
-      search: searchValue
-    }
   )
 
   const user = useUser();
@@ -73,24 +66,26 @@ export function Navbar() {
             onClick={() => setIsDialogOpen(true)}
             className={cn(
               inputStyles,
-              "flex items-center w-[300px] gap-2 text-muted-foreground hover:cursor-text mr-auto rounded-full"
+              "flex items-center w-full md:w-[300px]  gap-2 text-muted-foreground hover:cursor-text mr-auto rounded-full"
             )}>
             <MagnifyingGlassIcon className="h-3 w-3" aria-hidden="true" />
-            <span className="mr-auto">Search notes, topics ...</span>
-            <kbd className="rounded border bg-muted px-1.5 text-[10px] shadow-sm">
-              <span>⌘ K</span>
-            </kbd>
+            <div className="hidden md:flex w-full">
+              <span className="mr-auto">Search notes, topics ...</span>
+              <kbd className="rounded border bg-muted px-1.5 text-[10px] shadow-sm">
+                <span>⌘ K</span>
+              </kbd>
+            </div>
           </div>
 
           <Link
             href="/notes/upload"
             className={cn(
               buttonVariants({ variant: "link" }),
-              "w-fit px-4 text-sm hover:underline" 
+              "flex gap-2 px-4 text-sm hover:underline" 
             )}
           >
-            <Upload className="mr-1 mt-1 h-4 w-4" /> 
-            <span className="text-sm">Upload Note</span>
+            <Upload className="ml-auto mt-1 size-4" /> 
+            <span className="hidden md:inline-block text-sm">Upload Note</span>
           </Link>
 
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
@@ -142,24 +137,23 @@ export function Navbar() {
         </SignedOut>
       </div>
 
-      <CommandDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <CommandDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} shouldFilter={false}>
         <CommandInput
           onChangeCapture={(e) => setDebouncedSearchValue(e.currentTarget.value)}
           placeholder="Search ..."
         />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Notes">
-            {
-              results ? results.map((item) => (
-                <CommandItem key={item._id}>
-                  <Link href={`/notes/view?id=${item._id}`}>
-                    {item.title}
-                  </Link>
-                </CommandItem>
-              )) : <span>Loading ... </span>
-            }
-          </CommandGroup>
+          {!results ? (
+            <span>No results found.</span>
+          ) : (
+            results.map((item) => (
+              <CommandItem key={item._id}>
+                <Link href={`/notes/view?id=${item._id}`}>
+                  {item.title}
+                </Link>
+              </CommandItem>
+            ))
+          )}
         </CommandList>
       </CommandDialog>
     </div>

@@ -30,7 +30,6 @@ const formSchema = z.object({
 export default function Comments({ fileId, open, onOpenChange } : CommentsProps) {
 
   const user = useUser();
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -40,12 +39,20 @@ export default function Comments({ fileId, open, onOpenChange } : CommentsProps)
   const allComments = useQuery(api.comments.get.list, { fileId: fileId });
 
   const [localComments, setLocalComments] = useState(allComments);
-  const [localCommentElements, setLocalCommentElements] = useState<React.ReactNode[]>([]);
 
-  //TODO : Fetch comments and display them.
+  useEffect(() => {
+    setLocalComments(allComments)
+  }, [allComments])
+
 
   function handleSubmit(values: z.infer<typeof formSchema>) {
-    
+    if(!user.isLoaded || !user.isSignedIn) return; //Ensure that we have a valid user first before we upload.
+
+    newComment({
+      fileId: fileId,
+      userId: user.user.id,
+      content: values.comment,
+    })  
   }
 
   return(
@@ -56,7 +63,9 @@ export default function Comments({ fileId, open, onOpenChange } : CommentsProps)
         </SheetHeader>
 
         <div className="space-y-2">
-          {localCommentElements}
+          {localComments?.map((comment) => {
+            return <div key={comment._id}>Testing Text</div>
+          })}
         </div>
 
         <Form {...form}>
@@ -76,8 +85,6 @@ export default function Comments({ fileId, open, onOpenChange } : CommentsProps)
             <Button type="submit" variant="default">Comment</Button>
           </form>
         </Form>
-
-        
       </SheetContent>
     </Sheet>
   );
