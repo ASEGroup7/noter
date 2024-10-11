@@ -19,6 +19,8 @@ import { useDebouncedCallback } from "use-debounce";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { useSearch } from "../providers/SearchContextProvider";
 
+import { Upload } from 'lucide-react';
+
 export function Navbar() {
   const { searchValue, setSearchValue } = useSearch();
   const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
@@ -79,6 +81,17 @@ export function Navbar() {
               <span>⌘ K</span>
             </kbd>
           </div>
+
+          <Link
+            href="/notes/upload"
+            className={cn(
+              buttonVariants({ variant: "link" }),
+              "w-fit px-4 text-sm hover:underline" 
+            )}
+          >
+            <Upload className="mr-1 mt-1 h-4 w-4" /> 
+            <span className="text-sm">Upload Note</span>
+          </Link>
 
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
             <DropdownMenuTrigger asChild>
