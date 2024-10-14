@@ -16,7 +16,6 @@ import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "convex/react"
 import { zodResolver } from "@hookform/resolvers/zod";
 
-
 interface CommentsProps {
   fileId: string;
   open?: boolean;
@@ -44,7 +43,6 @@ export default function Comments({ fileId, open, onOpenChange } : CommentsProps)
     setLocalComments(allComments)
   }, [allComments])
 
-
   function handleSubmit(values: z.infer<typeof formSchema>) {
     if(!user.isLoaded || !user.isSignedIn) return; //Ensure that we have a valid user first before we upload.
 
@@ -64,7 +62,9 @@ export default function Comments({ fileId, open, onOpenChange } : CommentsProps)
 
         <div className="space-y-2">
           {localComments?.map((comment) => {
-            return <div key={comment._id}>Testing Text</div>
+            return <div key={comment._id}>
+              {CommentBubble({userId: comment.userId, content: comment.content})}
+              </div>
           })}
         </div>
 

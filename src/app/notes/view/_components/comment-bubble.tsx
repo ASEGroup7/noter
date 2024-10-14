@@ -17,9 +17,9 @@ export default async function CommentBubble(props: CommentBubbleProps) {
 
   return <div>
     <Avatar>
-      <AvatarImage src={userData.imageUrl} className="w-20" />
+      <AvatarImage src={userData.imageUrl} className="w-10" /><span><strong>{userData.username}: </strong></span>  
       <AvatarFallback />
-      <span>{userData.username}</span>  
+      
     </Avatar>
    {props.content}
   </div>;
