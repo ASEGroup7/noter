@@ -135,7 +135,7 @@ export default function Page() {
           <CustomTooltip
             trigger={<><ChatBubbleOvalLeftIcon className="size-4" /><span>{commentsCount || 0}</span></>}
             onClick={() => setIsCommentsOpen(true)}
-            content={commentsCount}
+            content="Comments"
           />
         </div>
 
