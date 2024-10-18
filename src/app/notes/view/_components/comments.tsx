@@ -49,6 +49,7 @@ export default function Comments({ fileId, open, onOpenChange} : CommentsProps) 
     event.preventDefault();
   }
 
+  //Can add rate limiting to anything that users upload to reduce spam.
   function handleSubmit(values: z.infer<typeof formSchema>) {
     if(!user.isLoaded || !user.isSignedIn) return;
     
