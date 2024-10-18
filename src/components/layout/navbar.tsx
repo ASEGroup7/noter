@@ -19,7 +19,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { useSearch } from "../providers/SearchContextProvider";
 
-import { Upload } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 
 export function Navbar() {
   const [ searchValue, setSearchValue ] = useState(""); 
@@ -84,8 +84,8 @@ export function Navbar() {
               "flex gap-2 px-4 text-sm hover:underline" 
             )}
           >
-            <Upload className="ml-auto mt-1 size-4" /> 
-            <span className="hidden md:inline-block text-sm">Upload Note</span>
+            <PlusIcon className="ml-auto mt-1 size-4" /> 
+            <span className="hidden md:inline-block text-sm">Create Note</span>
           </Link>
 
           <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>

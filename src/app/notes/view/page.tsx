@@ -2,25 +2,24 @@
 
 import Image from "next/image";
 import Comments from "./_components/comments";
-import PageSkeleton from "./_components/pageskeleton";
+import PageSkeleton from "./_components/page-skeleton";
+import Tiptap from "@/components/common/editor/tiptap";
 import CustomTooltip from "@/components/common/custom-tooltip";
 import PageContainer from "@/components/layout/page-container";
 import { EllipsisHorizontalIcon, PlusIcon, LinkIcon } from "@heroicons/react/24/solid";
 import { StarIcon, ChartBarIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
+import axios from "axios";
 import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
-import { useDebouncedCallback } from "use-debounce";
-import { useMutation, useQuery } from "convex/react";
+import { Id } from "@convex/dataModel";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { copyToClipboard } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
-import { Id } from "@convex/dataModel";
-import axios from "axios";
-import Tiptap from "@/components/common/editor/tiptap";
+import { useMutation, useQuery } from "convex/react";
 
 export default function Page() {
   const router = useRouter();
@@ -30,10 +29,12 @@ export default function Page() {
   if (id === null) router.push("/notes");
   
   const note = useQuery(api.notes.get.id, { id: id as string });
+  const allComments = useQuery(api.comments.get.list, { fileId: id as string })
   const updateNotesMutation = useMutation(api.notes.put.update);
   const deleteNote = useMutation(api.notes.delete.remove);
   
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+  const [commentsCount, setCommentsCount] = useState(0);
   const [noOfLikes, setNoOfLikes] = useState(note?.stars || 0);
   const [isLiked, setIsLiked] = useState<boolean>(() => {
     if (user?.publicMetadata?.starredFileId && Array.isArray(user.publicMetadata.starredFileId) && id) {
@@ -87,6 +88,10 @@ export default function Page() {
     router.push("/notes");
   }
   
+  useEffect(() => {
+    setCommentsCount(allComments?.length || 0);
+  }, [allComments])
+
   if (note === undefined) return <PageSkeleton />;
   return (
     <PageContainer>
@@ -128,9 +133,9 @@ export default function Page() {
           />
           
           <CustomTooltip
-            trigger={<><ChatBubbleOvalLeftIcon className="size-4" /><span>{note?.downloads || 0}</span></>}
+            trigger={<><ChatBubbleOvalLeftIcon className="size-4" /><span>{commentsCount || 0}</span></>}
             onClick={() => setIsCommentsOpen(true)}
-            content="Comments"
+            content={commentsCount}
           />
         </div>
 
