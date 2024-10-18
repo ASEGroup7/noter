@@ -11,7 +11,7 @@ export const list = query({
       const results = await ctx.db
         .query("comments")
         .filter(q => q.eq(q.field("fileId"), args.fileId))
-        .order("asc")
+        .order("desc")
         .collect();
 
       return results;

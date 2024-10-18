@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Comments from "./_components/comments";
-import PageSkeleton from "./_components/page-skeletonn";
+import PageSkeleton from "./_components/page-skeleton";
 import Tiptap from "@/components/common/editor/tiptap";
 import CustomTooltip from "@/components/common/custom-tooltip";
 import PageContainer from "@/components/layout/page-container";
@@ -133,7 +133,7 @@ export default function Page() {
           />
           
           <CustomTooltip
-            trigger={<><ChatBubbleOvalLeftIcon className="size-4" /><span>{note?.downloads || 0}</span></>}
+            trigger={<><ChatBubbleOvalLeftIcon className="size-4" /><span>{commentsCount || 0}</span></>}
             onClick={() => setIsCommentsOpen(true)}
             content={commentsCount}
           />

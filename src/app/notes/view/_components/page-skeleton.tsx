@@ -1,6 +1,6 @@
+import { StarIcon } from "@radix-ui/react-icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChartBarIcon, ChatBubbleOvalLeftIcon, LinkIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { StarIcon, PlusIcon } from "@radix-ui/react-icons";
 
 export default function PageSkeleton() {
   return(
@@ -24,7 +24,6 @@ export default function PageSkeleton() {
         </div>
 
         <div className="flex gap-4 items-center">
-          <PlusIcon className="size-6" /> 
           <LinkIcon className="size-5" />
           <EllipsisHorizontalIcon className="size-6"/>
         </div>
