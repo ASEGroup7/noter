@@ -31,7 +31,6 @@ const formSchema = z.object({
 
 export default function Comments({ fileId, open, onOpenChange} : CommentsProps) {
   const user = useUser();
-  const commentsRef = useRef<HTMLDivElement | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({ 
     resolver: zodResolver(formSchema), 
     mode: "onChange", 
@@ -60,20 +59,15 @@ export default function Comments({ fileId, open, onOpenChange} : CommentsProps) 
     }).then(() => form.reset())
   } 
 
-	useEffect(() => {
-		if (commentsRef.current) {
-			commentsRef.current.scrollTop = commentsRef.current.scrollHeight;
-		}
-	}, [allComments])
-
   return(<Sheet open={open} onOpenChange={onOpenChange}>
     <SheetContent className="flex flex-col gap-1 p-4">
       <SheetHeader>
         <SheetTitle className="text-left">Comments</SheetTitle>
       </SheetHeader>
 
-      <div className="flex-grow overflow-auto no-scrollbar space-y-3" ref={commentsRef}>
-        {allComments?.map((comment) => <CommentBubble key={comment._id} comment={comment} />)}
+      <div className="flex-grow overflow-auto no-scrollbar space-y-3">
+        {allComments?.length === 0 && <div className="h-full flex items-center justify-center">No comments</div>}
+       {allComments?.map((comment) => <CommentBubble key={comment._id} comment={comment} />)}
       </div>
 
       <Form {...form}>
