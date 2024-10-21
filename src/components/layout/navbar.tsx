@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Input, inputStyles } from "@/components/ui/input";
 import CmdkSearchBar from "@/components/common/cmdk-search-bar";
-import { Button, buttonVariants } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Search, Menu, Plus, UserIcon, BookmarkIcon, Cog, LogOut } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -18,11 +17,13 @@ import { useDebouncedCallback } from "use-debounce";
 import { usePaginatedQuery, useQuery } from "convex/react";
 import { useUser, useClerk, SignedIn, SignedOut } from "@clerk/nextjs";
 
+// TODO: Refactor so that we don't have to update both the mobile and desktop components when we change the number of nav elements
 export function Navbar() {
   const [searchValue, setSearchValue] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
   const setDebouncedSearchValue = useDebouncedCallback(setSearchValue, 300);
   const { results : notes } = usePaginatedQuery(api.notes.get.list, { fulltext: searchValue }, { initialNumItems: 5 });
   const tags = useQuery(api.tags.get.list, { fulltext: searchValue, limit: 3 });
@@ -59,6 +60,12 @@ export function Navbar() {
             <DropdownMenuContent className="w-[200px] translate-x-[-10px]">
               <DropdownMenuGroup>
                 <DropdownMenuItem>
+                  <DropdownMenuItemLink href="/upload" onClick={() => setIsDropdownOpen(false)}>
+                    <Plus className="size-4" />
+                    <span>Create Note</span>
+                  </DropdownMenuItemLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
                   <DropdownMenuItemLink href={`/profile/${user.user?.id}`} onClick={() => setIsDropdownOpen(false)}>
                     <UserIcon className="size-4" />
                     <span>Profile</span>
@@ -92,7 +99,7 @@ export function Navbar() {
           </DropdownMenu>
 
           {/* Mobile UI */}
-          <Sheet>
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Menu className="size-5 sm:hidden" />
             </SheetTrigger>
@@ -101,17 +108,36 @@ export function Navbar() {
                 <SheetTitle className="text-left text-3xl">Menu</SheetTitle>
               </SheetHeader>
               <div className="h-full flex flex-col py-3">
-                <div className="flex-1">
-                  <div
-                    onClick={() => setIsDialogOpen(true)}
-                    className={cn(
-                      inputStyles,
-                      "flex items-center w-full gap-2 text-muted-foreground hover:cursor-text mr-auto rounded-full",
-                    )}>
-                    <Search className="size-4" />
-                    <span>Search notes</span>
-                  </div>
+                <div
+                  onClick={() => setIsDialogOpen(true)}
+                  className={cn(
+                    inputStyles,
+                    "flex items-center w-full gap-2 text-muted-foreground hover:cursor-text mr-auto rounded-full",
+                  )}>
+                  <Search className="size-4" />
+                  <span>Search notes</span>
                 </div>
+
+                {/* Add elements here. */}
+                <div className="flex-1 flex flex-col gap-4 justify-center">
+                  <Link href="/upload" className="flex items-center gap-2" onClick={() => setIsSheetOpen(false)}>
+                    <Plus className="size-5" />
+                    <span>Create Note</span>
+                  </Link>
+                  <Link href={`/profile/${user.user?.id}`} className="flex items-center gap-2" onClick={() => setIsSheetOpen(false)}>
+                    <UserIcon className="size-5" />
+                    <span>Profile</span>
+                  </Link>
+                  <Link href="/library" className="flex items-center gap-2" onClick={() => setIsSheetOpen(false)}>
+                    <BookmarkIcon className="size-5" />
+                    <span>My notes</span>
+                  </Link>
+                  <p className="flex items-center gap-2 text-red-500" onClick={() => signOut()}>
+                    <LogOut className="size-5" />
+                    <span>Sign out</span>
+                  </p>
+                </div>
+
                 <div className="flex items-start space-x-3 py-4">
                   <Avatar className="size-9 mt-1">
                     <AvatarImage src={user.user?.imageUrl} />
