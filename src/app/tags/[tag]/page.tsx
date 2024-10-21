@@ -8,7 +8,7 @@ import { api } from "@convex/api";
 import { useRouter } from "next/navigation";
 import { usePaginatedQuery } from "convex/react";
 import { useScroll } from "@/components/hooks/useScroll";
-import NoteSkeleton from "@/app/notes/_components/noteskeleton";
+import NoteSkeleton from "@/components/common/note-skeleton";
 
 export default function Page({ params } : { params : { tag : string }}) {
   const notesRef = useRef<HTMLElement | null>(null);

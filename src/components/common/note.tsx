@@ -36,7 +36,7 @@ export default function Note({ note, className } : NoteProps) {
     <Link 
       href={`/notes/view?id=${note._id}`}
       className={cn(
-        "",
+        "border-b py-1",
         className
       )}>
       <div className="flex flex-col sm:flex-row-reverse gap-4 max-w-3xl mx-auto p-4">

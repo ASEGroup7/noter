@@ -2,7 +2,7 @@
 
 // import Note from "./note";
 import Note from "@/components/common/note";
-import NoteSkeleton from "./noteskeleton";
+import NoteSkeleton from "@/components/common/note-skeleton";
 
 import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
