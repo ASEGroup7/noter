@@ -59,7 +59,7 @@ export default function Note({ note, className } : NoteProps) {
             >
               {toPascalCase(creatorData?.username || creatorData?.fullName || "Username")}
             </Link>
-            <span className="text-sm text-muted-foreground">{note.tags[0]}</span>
+            <span className="text-sm text-muted-foreground">In {note.tags[0]}</span>
           </div>
           
           <h2 className="text-2xl font-bold">{note.title}</h2>
