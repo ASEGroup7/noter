@@ -7,7 +7,7 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import NotesSection from "./_components/notessection";
+import NotesSection from "./_components/notes-section";
 
 export default function Page() {
 

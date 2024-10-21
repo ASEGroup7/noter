@@ -1,6 +1,5 @@
 "use client";
 
-// import Note from "./note";
 import Note from "@/components/common/note";
 import NoteSkeleton from "@/components/common/note-skeleton";
 
