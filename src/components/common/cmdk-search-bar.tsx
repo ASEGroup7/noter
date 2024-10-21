@@ -23,14 +23,14 @@ export default function CmdkSearchBar(props: CmdkSearchBarProps) {
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, [])
+  }, [props])
 
   return (
     <div 
       onClick={() => props.onActivate()}
       className={cn(
         inputStyles,
-        "flex items-center w-full gap-2 text-muted-foreground hover:cursor-text mr-auto rounded-full",
+        "flex items-center w-full gap-2 text-muted-foreground hover:cursor-text mr-auto rounded-full hover:cursor-pointer",
         props.className,
       )}>
       <Search aria-hidden="true" />
