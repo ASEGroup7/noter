@@ -24,7 +24,7 @@ export const create = mutation({
       downloads: downloads || 0,
       fileId: fileId || "",
       fileUrl: fileUrl || "",
-      fulltext: description + " " + title,
+      fulltext: description + " " + title + " " + tags,
       html: html || "",
       stars: stars || 0,
       tags: tags || [],
@@ -43,7 +43,6 @@ export const update = mutation({
     downloads: v.optional(v.number()),
     fileId: v.optional(v.string()),
     fileUrl: v.optional(v.string()),
-    fulltext: v.optional(v.string()),
     html: v.optional(v.string()),
     stars: v.optional(v.number()),
     tags: v.optional(v.array(v.string())),
@@ -51,19 +50,19 @@ export const update = mutation({
     userId: v.optional(v.string()),
   }, 
   handler: async (ctx, args) => {
-    const { id, description, downloads, fileId, fileUrl, fulltext, html, stars, tags, title, userId } = args;
+    const { id, description, downloads, fileId, fileUrl, html, stars, tags, title, userId } = args;
 
     await ctx.db.patch(id as Id<"notes">, {
       ...(description !== undefined && { description }),
       ...(downloads !== undefined && { downloads }),
       ...(fileId !== undefined && { fileId }),
       ...(fileUrl !== undefined && { fileUrl }),
-      ...(fulltext !== undefined && { fulltext }),
       ...(html !== undefined && { html }),
       ...(stars !== undefined && { stars }),
       ...(tags !== undefined && { tags }),
       ...(title !== undefined && { title }),
       ...(userId !== undefined && { userId }),
+      fulltext: title + " " +  description + " " + (tags ? tags.join(" ") : ""),
     })
   }
 })

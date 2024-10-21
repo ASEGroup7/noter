@@ -3,17 +3,22 @@ import { query } from "../_generated/server";
 
 export const list = query({
   args: {
-    search: v.optional(v.string()),
+    fulltext: v.optional(v.string()),
+    limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    if(args.search === undefined || args.search === "") return await ctx.db
+    let result;
+
+    if(args.fulltext === undefined || args.fulltext === "") 
+      result = await ctx.db
       .query("tags")
       .order("desc")
-      .collect();
 
-    return await ctx.db
+    else
+      result = await ctx.db
       .query("tags")
-      .withSearchIndex("search_tags", q => q.search("tag", args.search as string))
-      .collect();
+      .withSearchIndex("search_tags", q => q.search("tag", args.fulltext as string))
+
+    return args.limit ? result.take(args.limit) : result.collect()
   }
 })
