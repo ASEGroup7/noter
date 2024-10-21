@@ -1,13 +1,13 @@
 "use client";
 
-import Image from "next/image";
+import { BarChart2 } from "lucide-react";
 import Comments from "./_components/comments";
 import PageSkeleton from "./_components/page-skeleton";
 import Tiptap from "@/components/common/editor/tiptap";
 import CustomTooltip from "@/components/common/custom-tooltip";
 import PageContainer from "@/components/layout/page-container";
-import { EllipsisHorizontalIcon, PlusIcon, LinkIcon } from "@heroicons/react/24/solid";
-import { StarIcon, ChartBarIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
+import { EllipsisHorizontalIcon, LinkIcon } from "@heroicons/react/24/solid";
+import { StarIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
 import axios from "axios";
@@ -125,7 +125,7 @@ export default function Page() {
           <CustomTooltip
             trigger={
               <>
-                <ChartBarIcon className="size-4" />
+                <BarChart2 className="size-4" />
                 <span>{note?.downloads || 0}</span>
               </>
             }

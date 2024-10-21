@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Input, inputStyles } from "@/components/ui/input";
+import { inputStyles } from "@/components/ui/input";
 import CmdkSearchBar from "@/components/common/cmdk-search-bar";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Search, Menu, Plus, UserIcon, BookmarkIcon, Cog, LogOut } from "lucide-react";
@@ -186,35 +186,3 @@ export function Navbar() {
     </nav>
   )
 }
-
-
-
-// function CommentBubble({ comment } : { comment : Doc<"comments">}) {
-
-//   const [user, setUser] = useState<User>();
-  
-//   useEffect(() => {
-//     async function GetUserInformation() {
-//       const { data } = await axios.get("/api/user", {
-//         params: { id: comment.userId }
-//       })
-
-//       setUser(data.user)
-//     }
-//     GetUserInformation();
-//   }, [comment])
-  
-//   return(<div className="flex items-start space-x-3 py-2 px-3">
-//     <Avatar className="size-10 mt-1">
-//       <AvatarImage src={user?.imageUrl} />
-//       <AvatarFallback>{user?.username?.slice(0,2).toUpperCase()}</AvatarFallback>
-//     </Avatar>
-//     <div className="flex-grow min-w-0">
-//       <div className="flex items-center space-x-2">
-//         <h3 className="text-sm font-medium text-foreground truncate">{user?.username || user?.firstName || user?.lastName}</h3>
-//         <span className="text-xs text-muted-foreground">•</span>
-//         <span className="text-xs text-muted-foreground whitespace-nowrap">{formatDistanceToNow(new Date(comment._creationTime), { addSuffix: true })}</span>
-//       </div>
-//       <p className="mt-0.5 text-sm text-foreground break-words">{comment.content}</p>
-//     </div>
-//   </div>)

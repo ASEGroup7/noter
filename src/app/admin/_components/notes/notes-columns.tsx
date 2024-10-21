@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { ExternalLink, Trash2 } from "lucide-react";
+import { BarChart2, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Square2StackIcon } from "@heroicons/react/24/outline";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { StarIcon, ChartBarIcon, EllipsisHorizontalIcon, ArrowsUpDownIcon } from "@heroicons/react/24/solid";
+import { StarIcon, EllipsisHorizontalIcon, ArrowsUpDownIcon } from "@heroicons/react/24/solid";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 import React from "react";
@@ -13,7 +12,7 @@ import { format } from "date-fns";
 import { Doc } from "@convex/dataModel";
 import { useMutation } from "convex/react";
 import { ColumnDef } from "@tanstack/react-table";
-import { cn, copyToClipboard, truncateString } from "@/lib/utils";
+import { copyToClipboard, truncateString } from "@/lib/utils";
 
 export const notesColumns: ColumnDef<Doc<"notes">>[] = [
   {
@@ -69,7 +68,7 @@ export const notesColumns: ColumnDef<Doc<"notes">>[] = [
   },
   {
     accessorKey: "downloads",
-    header: () => <div className="flex items-center justify-center"><ChartBarIcon className="size-4" /></div>,
+    header: () => <div className="flex items-center justify-center"><BarChart2 className="size-4" /></div>,
     cell: ({row}) => {
       const value = row.getValue("downloads") as number;
       return <div className="text-center">{value}</div>
@@ -93,6 +92,7 @@ export const notesColumns: ColumnDef<Doc<"notes">>[] = [
     enableHiding: false,
     cell: ({row}) => {
       const fullRow = row.original;
+      const deleteRow = useMutation(api.notes.delete.remove);
 
       return (
         <DropdownMenu>
@@ -105,6 +105,10 @@ export const notesColumns: ColumnDef<Doc<"notes">>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => copyToClipboard(fullRow._id)}>Copy ID</DropdownMenuItem>
             <DropdownMenuItem onClick={() => copyToClipboard(fullRow.userId)}>Copy owner ID</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => deleteRow({ id: fullRow._id })} className="text-red-500">
+              <Trash2 className="size-4 mr-2" />
+              <span>Delete</span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
