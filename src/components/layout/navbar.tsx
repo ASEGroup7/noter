@@ -17,7 +17,6 @@ import { usePaginatedQuery, useQuery } from "convex/react";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useDebouncedCallback } from "use-debounce";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { useSearch } from "../providers/SearchContextProvider";
 
 import { PlusIcon } from 'lucide-react';
 
@@ -26,11 +25,16 @@ export function Navbar() {
   const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
   const [ isDialogOpen, setIsDialogOpen ] = useState(false);
   const setDebouncedSearchValue = useDebouncedCallback(setSearchValue, 300);
-  const { results  } = usePaginatedQuery(
+  const { results : notes } = usePaginatedQuery(
     api.notes.get.list,
     { fulltext: searchValue },
     { initialNumItems: 5 }
   )
+
+  const tags = useQuery(api.tags.get.list, { 
+    fulltext: searchValue,
+    limit: 3,
+  })
 
   const user = useUser();
   const { signOut } = useClerk();
@@ -143,17 +147,27 @@ export function Navbar() {
           placeholder="Search ..."
         />
         <CommandList>
-          {!results ? (
+          {!notes ? (
             <span>No results found.</span>
           ) : (
-            results.map((item) => (
-              <CommandItem key={item._id}>
-                <Link href={`/notes/view?id=${item._id}`}>
-                  {item.title}
+            notes.map((note) => (
+              <CommandItem key={note._id}>
+                <Link href={`/notes/view?id=${note._id}`} onClick={() => setIsDropdownOpen(false)}>
+                  {note.title}
                 </Link>
               </CommandItem>
             ))
           )}
+
+          {
+            tags?.map((tag) => (
+              <CommandItem key={tag._id}>
+                <Link href={`/tags/${tag.tag}`} onClick={() => setIsDropdownOpen(false)}>
+                  {tag.tag}
+                </Link>
+              </CommandItem>
+            ))
+          }
         </CommandList>
       </CommandDialog>
     </div>
