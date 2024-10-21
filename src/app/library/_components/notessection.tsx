@@ -17,7 +17,6 @@ export default function NotesSection({
   className?: string;
   starredFileId: string[];
 }) {
-  // console.log("variable: ",starredFileId);
 
   const notesRef = useRef<HTMLDivElement | null>(null);
   const {
