@@ -4,7 +4,7 @@ export default function PageContainer({ children, className }: { children?: Reac
   return(
     <section className={cn(
       className,
-      "flex-1 max-w-screen-md min-w-[680px,90%] w-full mx-auto" 
+      "flex-1 max-w-screen-lg min-w-[680px,90%] w-full mx-auto" 
     )}>
       { children }
     </section>

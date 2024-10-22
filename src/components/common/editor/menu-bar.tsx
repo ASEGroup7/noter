@@ -94,7 +94,7 @@ export function MenuBar({ editor }: { editor: Editor | null }) {
 
   return (
     <>
-      <ToggleGroup type="multiple" className="flex flex-wrap gap-1 mt-2 mb-2">
+      <ToggleGroup type="multiple" className="flex flex-wrap gap-1 mt-2 mb-2 ">
         {/* Heading and Font Family */}
         <div>
           <Heading editor={editor} />

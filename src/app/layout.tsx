@@ -39,7 +39,9 @@ export default function RootLayout({
             <SearchContextProvider>
               <TooltipProvider>
                 <Navbar />
-                {children}
+                <div className="pt-16"> {/* Add padding top to account for fixed Navbar height */}
+                  {children}
+                </div>
                 <Toaster />
               </TooltipProvider>
             </SearchContextProvider>

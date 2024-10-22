@@ -1,89 +1,125 @@
-import { useState } from "react";
-import Fuse from 'fuse.js'; // Importing Fuse.js for fuzzy search
-import { Checkbox } from "@/components/ui/checkbox"; // Assuming you're using a UI library for checkbox
-import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { useQuery } from "convex/react";
+import { api } from "@convex/api";
+import { useRouter } from "next/navigation"; 
+import { useEffect, useState } from "react";
+import Link from 'next/link'; // Import the Link component from Next.js
 
-const availableTags = ["Technology", "Science", "Education", "Health", "Finance", "Travel", "Lifestyle"]; // Example tag list
+const Sidebar = () => {
+  const router = useRouter(); 
 
-export default function CreateNotePage() {
-  const [checkedTags, setCheckedTags] = useState<string[]>([]); // State to store checked tags
+  // Fetch the first 20 posts for Section 1
+  const randomTagNotesQuery = useQuery(
+    api.notes.get.list,
+    { paginationOpts: { numItems: 20, cursor: null } }
+  );
+  
+  // Fetch all tags for Section 2
+  const allTagsQuery = useQuery(api.tags.get.list, {}); 
 
-  // Function to handle the checking/unchecking of tags
-  const handleTagChange = (tag: string) => {
-    setCheckedTags((prevTags) =>
-      prevTags.includes(tag) ? prevTags.filter((t) => t !== tag) : [...prevTags, tag]
-    );
-  };
+  const randomTagNotes = randomTagNotesQuery?.page ?? [];
+  const allTags = allTagsQuery ?? [];
 
   return (
-    <div className="relative flex-1 h-full">
-      {/* Toggle Button for Sidebar */}
-      <ResizablePanelGroup direction="horizontal" className="flex-1">
-        <Sidebar checkedTags={checkedTags} onTagChange={handleTagChange} />
-      </ResizablePanelGroup>
+    <div className="sticky top-20">
+      {/* Section 1: Topic of the Day */}
+      <TopicOfTheDay randomTagNotes={randomTagNotes} />
+
+      {/* Section 2: Recommended Topics */}
+      {renderRecommendedTopics(allTags, router)}
+    </div>
+
+  )
+};
+
+// Function to render Section 1: Topic of the Day
+const TopicOfTheDay = ({ randomTagNotes }: { randomTagNotes: any[] }) => {
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
+  // Fetch notes for the selected tag
+  const notesForTagQuery = useQuery(
+    api.notes.get.list,
+    selectedTag
+      ? { tags: [selectedTag], paginationOpts: { numItems: 3, cursor: null } }
+      : "skip" // Only run the query if a tag is selected
+  );
+
+  const notesForTag = notesForTagQuery?.page ?? [];
+
+  // Effect to select a random tag from the retrieved posts
+  useEffect(() => {
+    if (randomTagNotes.length > 0) {
+      // Collect all unique tags from the notes
+      const allTags = randomTagNotes
+        .map(note => note.tags)
+        .flat() // Flatten the array of arrays
+        .filter((tag, index, self) => self.indexOf(tag) === index); // Remove duplicates
+
+      if (allTags.length > 0) {
+        // Randomly select a tag from the list of tags
+        const randomTag = allTags[Math.floor(Math.random() * allTags.length)];
+        setSelectedTag(randomTag);
+        console.log(`Selected tag: ${randomTag}`);
+      }
+    }
+  }, [randomTagNotes]);
+
+  return (
+    <div>
+      <h2 className="text-sm font-medium mx-3 my-2 ">Topic of the Day:</h2>
+      {notesForTag.length > 0 ? (
+        <>
+          <h3 className="text-base font-semibold ml-6 border-b border-gray-500 text-center">{selectedTag}</h3>
+          {renderPosts(notesForTag)} {/* Render the posts */}
+        </>
+      ) : (
+        <p className="text-gray-500 text-sm font-light ml-6">Loading notes for this topic...</p>
+      )}
     </div>
   );
-}
+};
 
-const Sidebar = ({ checkedTags, onTagChange }: { checkedTags: string[]; onTagChange: (tag: string) => void }) => {
-  const [searchTerm, setSearchTerm] = useState<string>(""); // State to track the search term
-  const [filteredTags, setFilteredTags] = useState<string[]>(availableTags); // State to store filtered tags
+// Function to render posts
+const renderPosts = (posts: any[]) => {
+  return posts.map((post, index) => (
+    <div key={index} className="border-b pb-1">
+      <Link href={`/notes/view?id=${post._id}`} className="block hover:bg-gray-100 p-2 rounded">
+        <h3 className="text-sm font-medium mx-4">{post.title}</h3>
+        <p className="text-gray-500 text-sm font-light mx-4">{post.description}</p>
+      </Link>
+    </div>
+  ));
+};
+
+const renderRecommendedTopics = (allTags: any[] = [], router: any) => {
   
-  // Fuse.js setup for fuzzy search
-  const fuse = new Fuse(availableTags, {
-    keys: ['name'], // We're searching on the tag names
-    threshold: 0.3, // Adjust for how fuzzy the matching should be
-  });
-
-  // Handle search input changes
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const term = event.target.value;
-    setSearchTerm(term);
-
-    if (term.trim() === "") {
-      // If the search term is empty, show all tags
-      setFilteredTags(availableTags);
-    } else {
-      // Use Fuse.js to get fuzzy search results
-      const result = fuse.search(term).map((res) => res.item);
-      setFilteredTags(result);
-    }
+  const handleTagClick = (tag: string) => {
+    router.push(`/tags/${encodeURIComponent(tag)}`);
   };
 
-  return (
-    <ResizablePanel
-      defaultSize={30}
-      maxSize={30}
-      minSize={10}
-      className="p-4 h-full transition-transform transform"
-    >
-      <h1 className="text-2xl font-bold mb-4">Tags</h1>
-      
-      {/* Search Bar */}
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        placeholder="Search tags..."
-        className="mb-4 p-2 border border-gray-300 rounded w-full"
-      />
+  // Shuffle the allTags array
+  const shuffledTags = [...allTags].sort(() => 0.5 - Math.random());
 
-      <div className="space-y-2">
-        {filteredTags.length > 0 ? (
-          filteredTags.map((tag) => (
-            <div key={tag} className="flex items-center space-x-2">
-              <Checkbox
-                checked={checkedTags.includes(tag)} // Check if the tag is in the list
-                onCheckedChange={() => onTagChange(tag)} // Update the state when the user clicks
-                id={tag}
-              />
-              <label htmlFor={tag} className="cursor-pointer">{tag}</label>
-            </div>
-          ))
-        ) : (
-          <p>No tags found.</p>
-        )}
-      </div>
-    </ResizablePanel>
+  return (
+    <div>
+  <h2 className="text-sm font-medium mx-3 my-2">Topics:</h2>
+  <div className="flex flex-wrap gap-2 max-h-80 overflow-y-auto hide-scrollbar"> {/* Custom class to hide scrollbar */}
+    {allTags.length !== 0 ? (
+      shuffledTags.map((tag) => (
+        <div
+          key={tag._id}
+          className="bg-gray-300 text-xs font-semibold ml-4 px-2 py-1 rounded-full cursor-pointer"
+          onClick={() => handleTagClick(tag.tag)}
+        >
+          {tag.tag}
+        </div>
+      ))
+    ) : (
+      <p className="text-gray-500 text-sm font-light ml-6">Loading topics...</p>
+    )}
+  </div>
+</div>
   );
 };
+
+
+export default Sidebar;

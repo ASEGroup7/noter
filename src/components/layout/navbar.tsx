@@ -5,7 +5,7 @@ import Image from "next/image";
 import { inputStyles } from "@/components/ui/input";
 import CmdkSearchBar from "@/components/common/cmdk-search-bar";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Search, Menu, Plus, UserIcon, BookmarkIcon, Cog, LogOut } from "lucide-react";
+import { Search, Menu, Plus, UserIcon, Heart , Cog, LogOut } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { CommandDialog, CommandInput, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuItemLink, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -24,24 +24,15 @@ export function Navbar() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-<<<<<<< HEAD
   const setDebouncedSearchValue = useDebouncedCallback(setSearchValue, 300);
   const { results : notes } = usePaginatedQuery(api.notes.get.list, { fulltext: searchValue }, { initialNumItems: 5 });
   const tags = useQuery(api.tags.get.list, { fulltext: searchValue, limit: 3 });
-=======
-  // const tags = useQuery(
-  //   api.tags.get.list,
-  //   {
-  //     search: searchValue
-  //   }
-  // )
->>>>>>> 61bd8d3 (added sidebar v1)
 
   const user = useUser();
   const { signOut } = useClerk();
 
   return (
-    <nav className="flex items-center justify-between p-4 border-b border-gray-100">
+    <nav className="fixed top-0 left-0 w-full flex items-center justify-between p-4 border-b border-gray-100 bg-white z-40">
       <div className="flex items-center space-x-4">
         <div className="relative w-8 h-8 sm:w-10 sm:h-10">
           <Link href="/notes">
@@ -82,8 +73,8 @@ export function Navbar() {
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <DropdownMenuItemLink href="/library" onClick={() => setIsDropdownOpen(false)}>
-                    <BookmarkIcon className="size-4" />
-                    <span>My notes</span>
+                    <Heart  className="size-4" />
+                    <span> Liked notes</span>
                   </DropdownMenuItemLink>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
@@ -138,7 +129,7 @@ export function Navbar() {
                     <span>Profile</span>
                   </Link>
                   <Link href="/library" className="flex items-center gap-2" onClick={() => setIsSheetOpen(false)}>
-                    <BookmarkIcon className="size-5" />
+                    <Heart  className="size-5" />
                     <span>My notes</span>
                   </Link>
                   <p className="flex items-center gap-2 text-red-500" onClick={() => signOut()}>

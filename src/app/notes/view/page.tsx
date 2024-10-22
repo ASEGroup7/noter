@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { copyToClipboard } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQuery } from "convex/react";
+import Image from "next/image"
 
 export default function Page() {
   const router = useRouter();
@@ -95,17 +96,32 @@ export default function Page() {
   if (note === undefined) return <PageSkeleton />;
   return (
     <PageContainer>
-      <h1 className="text-4xl font-bold mt-12">{note?.title}</h1>
-      <h3 className="text-xl mt-5 mb-2 text-zinc-600">{note?.description}</h3>
-      <small className="flex w-full flex-wrap mb-5 gap-1">
-        <span>In</span>
-        {note?.tags.map((tag, index) => (
-          <span key={tag} className="underline">
-            {tag}
-            {index !== note.tags.length - 1 && ", "}
-          </span>
-        ))}
-      </small>
+      <div className="flex justify-between items-start">
+        <div className="flex-1 ml-3">
+          <h1 className="text-4xl font-bold mt-12">{note?.title}</h1>
+          <h3 className="text-xl mt-5 mb-2 text-zinc-600">{note?.description}</h3>
+          <small className="flex w-full flex-wrap mb-5 gap-1">
+            <span>In</span>
+            {note?.tags.map((tag, index) => (
+              <span key={tag} className="underline">
+                {tag}
+                {index !== note.tags.length - 1 && ", "}
+              </span>
+            ))}
+          </small>
+        </div>
+        <div className="ml-6 flex-shrink-0">
+          {note?.fileUrl && (
+            <Image
+              src={note.fileUrl}
+              alt="Header Image"
+              width={200}
+              height={200}
+              className="w-[200px] h-[200px] object-cover rounded-sm p-3"
+            />
+          )}
+        </div>
+      </div>
       <div className="flex px-1 py-4 border-y justify-between mb-4">
         <div className="flex gap-4">
           <CustomTooltip

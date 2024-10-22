@@ -177,6 +177,17 @@
   }
 } 
 
+/* Add this to your global CSS file */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Hides scrollbar for Chrome, Safari, and Opera */
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* Hides scrollbar for Internet Explorer and Edge */
+  scrollbar-width: none;  /* Hides scrollbar for Firefox */
+}
+
+
 /* Tiptap Mathematics Extension */
 .tiptap .Tiptap-mathematics-editor {
   background: #202020;
