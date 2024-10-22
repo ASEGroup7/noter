@@ -32,12 +32,12 @@ export function Navbar() {
     { initialNumItems: 5 }
   )
 
-  const tags = useQuery(
-    api.tags.get.list,
-    {
-      search: searchValue
-    }
-  )
+  // const tags = useQuery(
+  //   api.tags.get.list,
+  //   {
+  //     search: searchValue
+  //   }
+  // )
 
   const user = useUser();
   const { signOut } = useClerk();

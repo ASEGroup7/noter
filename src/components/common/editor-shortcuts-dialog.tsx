@@ -33,25 +33,27 @@ const shortcuts = [
 
 export default function MarkdownShortcutsDialog() {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button className="fixed bottom-5 right-5 p-2 rounded-full hover:bg-gray-200 transition-colors">
-          <CircleHelp className="h-6 w-6 text-gray-800 dark:text-gray-100" />
-        </button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[700px]">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold mb-4">Markdown Shortcuts</DialogTitle>
-        </DialogHeader>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {shortcuts.map((item) => (
-            <div key={item.description} className="flex flex-col space-y-1">
-              <div className="text-sm font-medium">{item.description}</div>
-              <KeyboardShortcut>{item.shortcut}</KeyboardShortcut>
-            </div>
-          ))}
-        </div>
-      </DialogContent>
-    </Dialog>
+    <div className="relative"> {/* Make sure parent has relative positioning */}
+      <Dialog>
+        <DialogTrigger asChild>
+          <button className="p-2 rounded-full hover:bg-gray-200 transition-colors">
+            <CircleHelp className="h-6 w-6 text-gray-800 dark:text-gray-100" />
+          </button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[700px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold mb-4">Markdown Shortcuts</DialogTitle>
+          </DialogHeader>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {shortcuts.map((item) => (
+              <div key={item.description} className="flex flex-col space-y-1">
+                <div className="text-sm font-medium">{item.description}</div>
+                <KeyboardShortcut>{item.shortcut}</KeyboardShortcut>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
