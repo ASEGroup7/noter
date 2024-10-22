@@ -1,13 +1,14 @@
 "use client";
 
-import Note from "@/components/common/note";
 import PageContainer from "@/components/layout/page-container";
+import { ResizablePanel, ResizablePanelGroup, ResizableHandle } from "@/components/ui/resizable"; // Assuming these are from your UI library
+import Sidebar from "./_components/sidebarPanel"; // Your sidebar component
+import NotesSection from "./_components/notessection"; // Main content component
 
 import { useRef } from "react";
 import { api } from "@convex/api";
 import { usePaginatedQuery } from "convex/react";
 import { useScroll } from "@/components/hooks/useScroll";
-import NoteSkeleton from "@/components/common/note-skeleton";
 
 export default function Page() {
   const notesRef = useRef<HTMLDivElement | null>(null);
@@ -17,23 +18,22 @@ export default function Page() {
   useScroll(notesRef, () => loadMore(5));
 
   return (
-    <PageContainer>
-      <div 
-        ref={notesRef}
-        className="flex-1 flex flex-col overflow-y-auto no-scrollbar"
-      >
-        {status === "LoadingFirstPage" ? (
-          <>
-            <NoteSkeleton />
-            <NoteSkeleton />
-            <NoteSkeleton />
-          </>
-        ) : null}
-        {notes.map((note) => (
-          <Note key={note._id} note={note} />
-        ))}
-      </div>
-    </PageContainer>
-  )
+    <ResizablePanelGroup direction="horizontal" className="flex-1 h-full">
+      
+      {/* Main Content Panel */}
+      <ResizablePanel defaultSize={80} minSize={50}>
+        <PageContainer>
+          <NotesSection />
+        </PageContainer>
+      </ResizablePanel>
 
+      {/* Resizable handle between panels */}
+      <ResizableHandle withHandle />
+
+      {/* Sidebar Panel */}
+      <ResizablePanel defaultSize={20} minSize={0} maxSize={20}>
+        <Sidebar />
+      </ResizablePanel>
+    </ResizablePanelGroup>
+  );
 }

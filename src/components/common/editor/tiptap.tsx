@@ -67,11 +67,19 @@ export default function Tiptap({
 
   return (
     <>
+<<<<<<< HEAD
       {/* Pass the editor instance to MenuBar */}
       { editable ? <MenuBar editor={editor} /> : null }
       <EditorContent editor={editor} onKeyDown={handleKeyDown} />
       {/* Render the TableContextMenu component and pass the editor instance */}
       {editor && <TableContextMenu editor={editor} />}
+=======
+      <div className="max-w-screen-lg mx-auto">
+        <MenuBar editor={editor} />
+        <EditorContent editor={editor} onKeyDown={handleKeyDown} />
+        {editor && <TableContextMenu editor={editor} />}
+      </div>
+>>>>>>> 61bd8d3 (added sidebar v1)
     </>
   );
 }

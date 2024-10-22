@@ -24,9 +24,18 @@ export function Navbar() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
+<<<<<<< HEAD
   const setDebouncedSearchValue = useDebouncedCallback(setSearchValue, 300);
   const { results : notes } = usePaginatedQuery(api.notes.get.list, { fulltext: searchValue }, { initialNumItems: 5 });
   const tags = useQuery(api.tags.get.list, { fulltext: searchValue, limit: 3 });
+=======
+  // const tags = useQuery(
+  //   api.tags.get.list,
+  //   {
+  //     search: searchValue
+  //   }
+  // )
+>>>>>>> 61bd8d3 (added sidebar v1)
 
   const user = useUser();
   const { signOut } = useClerk();

@@ -139,7 +139,9 @@ export function MenuBar({ editor }: { editor: Editor | null }) {
         {/* Text Alignment and Table Grid Selector */}
         <TextAlignPicker editor={editor} />
         
-        <MarkdownShortcutsDialog/>
+        <div> 
+          <MarkdownShortcutsDialog />
+        </div>
         
       </ToggleGroup>
     </>
