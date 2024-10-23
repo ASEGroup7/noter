@@ -39,7 +39,7 @@ const TopicOfTheDay = ({ randomTagNotes }: { randomTagNotes: any[] }) => {
   const notesForTagQuery = useQuery(
     api.notes.get.list,
     selectedTag
-      ? { tags: [selectedTag], paginationOpts: { numItems: 3, cursor: null } }
+      ? { fulltext: selectedTag, paginationOpts: { numItems: 3, cursor: null } }
       : "skip" // Only run the query if a tag is selected
   );
 
