@@ -17,7 +17,6 @@ import { notFound } from "next/navigation";
 import { User } from "@clerk/clerk-sdk-node";
 import { usePaginatedQuery } from "convex/react";
 import { useState, useEffect, useRef } from "react";
-import { useScroll } from "@/components/hooks/useScroll";
 import { toPascalCase, copyToClipboard } from "@/lib/utils";
 
 export default function Page({
@@ -52,11 +51,14 @@ export default function Page({
     getUserData();
   }, [params.id]);
 
-  useScroll(notesRef, () => loadMore(5));
+	function handleScroll(e: React.UIEvent<HTMLDivElement>) { //Load more chats when user scrolls to the bottom
+		const bottom = e.currentTarget.scrollHeight - e.currentTarget.scrollTop === e.currentTarget.clientHeight;
+		if(bottom && status === "CanLoadMore") loadMore(3);
+	}
 
   return (
     <PageContainer>
-      <div ref={notesRef} className="flex items-center gap-4 py-10 border-b">
+      <div className="flex items-center gap-4 py-10 border-b">
         <div className="flex items-center justify-left gap-4">
           <Avatar className="h-[80px] w-[80px]">
             <AvatarImage src={profileUser?.imageUrl} />
@@ -134,9 +136,15 @@ export default function Page({
           </DialogContent>
         </Dialog>
       </div>
-      {
-        results.map((note) => <Note key={note._id} note={note} />)
-      }
+      <div 
+        ref={notesRef}
+        className="flex-1 h-[90vh] min-h-fit flex flex-col overflow-y-auto no-scrollbar"
+        onScroll={handleScroll}
+      >
+        {
+          results.map((note) => <Note key={note._id} note={note} />)
+        }
+      </div>
     </PageContainer>
   );
 }

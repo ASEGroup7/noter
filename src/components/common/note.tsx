@@ -53,12 +53,9 @@ export default function Note({ note, className } : NoteProps) {
               <AvatarImage src={creatorData?.imageUrl} />
               <AvatarFallback>{creatorData?.username?.[0]}</AvatarFallback>
             </Avatar>
-            <Link 
-              href={`/profile/${creatorData?.id}`}
-              className="hover:underline pl-1"
-            >
+            <div className="pl-1">
               {toPascalCase(creatorData?.username || creatorData?.fullName || "Username")}
-            </Link>
+            </div>
             <span className="text-sm text-muted-foreground">In {note.tags[0]}</span>
           </div>
           

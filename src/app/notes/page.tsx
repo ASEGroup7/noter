@@ -6,7 +6,6 @@ import PageContainer from "@/components/layout/page-container";
 import { useRef } from "react";
 import { api } from "@convex/api";
 import { usePaginatedQuery } from "convex/react";
-import { useScroll } from "@/components/hooks/useScroll";
 import NoteSkeleton from "@/components/common/note-skeleton";
 
 export default function Page() {
@@ -14,13 +13,17 @@ export default function Page() {
 
   const { results: notes, status, loadMore } = usePaginatedQuery(api.notes.get.list, {}, { initialNumItems: 5 });
 
-  useScroll(notesRef, () => loadMore(5));
-
+	function handleScroll(e: React.UIEvent<HTMLDivElement>) { //Load more chats when user scrolls to the bottom
+		const bottom = e.currentTarget.scrollHeight - e.currentTarget.scrollTop === e.currentTarget.clientHeight;
+		if(bottom && status === "CanLoadMore") loadMore(3);
+	}
+  
   return (
     <PageContainer>
       <div 
         ref={notesRef}
-        className="flex-1 flex flex-col overflow-y-auto no-scrollbar"
+        className="flex-1 h-[90vh] flex flex-col overflow-y-auto no-scrollbar"
+        onScroll={handleScroll}
       >
         {status === "LoadingFirstPage" ? (
           <>
