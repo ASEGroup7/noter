@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
 import { useRef } from "react";
 import { usePaginatedQuery } from "convex/react";
-import { useScroll } from "@/components/hooks/useScroll";
 
 export default function NotesSection({ 
   className,
@@ -26,15 +25,19 @@ export default function NotesSection({
     fileId: starredFileId
   }, { initialNumItems: 5 });
 
-  useScroll(notesRef, () => loadMore(5));
+
+	function handleScroll(e: React.UIEvent<HTMLDivElement>) { //Load more chats when user scrolls to the bottom
+		const bottom = e.currentTarget.scrollHeight - e.currentTarget.scrollTop === e.currentTarget.clientHeight;
+		if(bottom && status === "CanLoadMore") loadMore(3);
+  }
 
   return (
     <div
-      ref={notesRef}
       className={cn(
         className,
-        "flex-1 flex flex-col overflow-y-auto no-scrollbar"
+        "flex-1 h-[80vh] flex-col overflow-y-auto no-scrollbar"
       )}
+      onScroll={handleScroll}
     >
       {status === "LoadingFirstPage" ? (
         <>
@@ -44,7 +47,6 @@ export default function NotesSection({
         </>
       ) : null}
       {notes.map((note) => (
-        // <Note key={note._id} {...note} />
         <Note key={note._id} note={note} />
       ))}
       
