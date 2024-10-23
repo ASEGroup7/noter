@@ -64,6 +64,13 @@ export default function Note({ note, className } : NoteProps) {
           
           <h2 className="text-2xl font-bold">{note.title}</h2>
           <p className="text-muted-foreground">{note.description}</p>
+          {note.originalId && (
+            <div className="text-sm text-blue-600 hover:underline">
+              <Link href={`/notes/view?id=${note.originalId}`}>
+                Click to view original post
+              </Link>
+            </div>
+          )}
           <div className="flex items-center space-x-4 text-sm text-muted-foregrond">
             <span>{format(new Date(note._creationTime || 0), "MMM yyy")}</span>
             <div className="flex items-center">

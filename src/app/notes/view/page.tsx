@@ -21,6 +21,7 @@ import { copyToClipboard } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQuery } from "convex/react";
 import Image from "next/image"
+import { underscoreInputRegex } from "@tiptap/extension-bold";
 
 export default function Page() {
   const router = useRouter();
@@ -33,6 +34,7 @@ export default function Page() {
   const allComments = useQuery(api.comments.get.list, { fileId: id as string })
   const updateNotesMutation = useMutation(api.notes.put.update);
   const deleteNote = useMutation(api.notes.delete.remove);
+  const createNewNote = useMutation(api.notes.put.create);
   
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
@@ -49,6 +51,29 @@ export default function Page() {
   useEffect(() => {
     if(note) setNoOfLikes(note.stars);
   }, [note]);
+
+  const handleFork = async () => {
+
+    try {
+
+      const noteId = await createNewNote({
+        description: note?.description,
+        html: note?.html,
+        fileUrl: note?.fileUrl,
+        fileId: "",
+        stars: 0,
+        downloads: 0,
+        tags: note?.tags,
+        title: note?.title,
+        userId: user?.id,
+        originalId: id ?? undefined
+      });
+
+      router.push(`/notes/view?id=${noteId}`);
+    } catch (error) {
+      console.error("Note creation failed:", error);
+    } 
+  };
 
   const handleLikeClick = async () => {
     if (!isLoaded || !user || !id) return;
@@ -165,11 +190,15 @@ export default function Page() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuGroup>
-                {isOwner && (
-                  <DropdownMenuItem onClick={() => router.push(`/notes/edit?id=${id}`)}>
-                    Edit
-                  </DropdownMenuItem>
-                )}
+              {/* {isOwner ? (
+                <DropdownMenuItem onClick={() => router.push(`/notes/edit?id=${id}`)}>
+                  Edit
+                </DropdownMenuItem>
+              ) : ( */}
+                <DropdownMenuItem onClick={handleFork}>
+                  Fork Note
+                </DropdownMenuItem>
+              {/* )} */}
                 <DropdownMenuItem>Download</DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

@@ -11,7 +11,8 @@ export const notesTableSchema = v.object({
   tags: v.array(v.string()),
   title: v.string(),
   fulltext: v.string(), //We do fulltext search on only the title and description.
-  userId: v.string(), //Notes must have a userId
+  userId: v.string(), //Notes must have a userId, 
+  originalId: v.optional(v.string()),
 })
 
 export const commentsTableSchema = v.object({
