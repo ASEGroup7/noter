@@ -51,10 +51,6 @@ export default function Page({
     getUserData();
   }, [params.id]);
 
-  useEffect(() => {
-    console.log(results);
-  }, [results])
-
 	function handleScroll(e: React.UIEvent<HTMLDivElement>) { //Load more chats when user scrolls to the bottom
 		const bottom = e.currentTarget.scrollHeight - e.currentTarget.scrollTop === e.currentTarget.clientHeight;
 		if(bottom && status === "CanLoadMore") loadMore(3);

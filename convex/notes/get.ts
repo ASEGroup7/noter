@@ -7,33 +7,35 @@ export const list = query({
   args: { 
     paginationOpts: paginationOptsValidator,
     fulltext: v.optional(v.string()),
-    tags: v.optional(v.array(v.string())),
-    fileId: v.optional(v.array(v.string()))
   },
   handler: async (ctx, args) => {
-    let results;
-
     if(args.fulltext === undefined || args.fulltext === "") {
-      results = await ctx.db
+      return await ctx.db
         .query("notes")
         .order("desc")
         .paginate(args.paginationOpts)
     } else {
-      results = await ctx.db
+      return await ctx.db
         .query("notes")
         .withSearchIndex("search_fulltext", q => q.search("fulltext", args.fulltext as string))
         .paginate(args.paginationOpts)
     }
+  }
+})
 
-    if(args.tags !== undefined && args.tags.length !== 0){
-      results.page = results.page.filter(note => args.tags?.some(tag => note.tags.includes(tag)));
-    }
-
-    if(args.fileId !== undefined && args.fileId.length !== 0){
-      results.page = results.page.filter(note => args.fileId?.some(fileId => note._id.includes(fileId)));
-    }
+export const idList = query({
+  args: {
+    fileIds: v.array(v.id("notes"))
+  },
+  handler: async (ctx, args) => {
+    const documents = await Promise.all(
+      args.fileIds.map(async (id) => {
+        if(!ctx.db.normalizeId("notes", id)) return null;
+        return await ctx.db.get(id);
+      })
+    );
     
-    return results;
+    return documents;
   }
 })
 
