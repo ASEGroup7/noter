@@ -120,7 +120,7 @@ export default function Page() {
   if (note === undefined) return <PageSkeleton />;
   return (
     <PageContainer>
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-start">
         <div className="flex-1 ml-3">
           <h1 className="text-4xl font-bold mt-12">{note?.title}</h1>
           <h3 className="text-xl mt-5 mb-2 text-zinc-600">{note?.description}</h3>
@@ -134,7 +134,7 @@ export default function Page() {
             ))}
           </small>
         </div>
-        <div className="ml-6 flex-shrink-0">
+        <div className="ml-6 flex-shrink-0 self-center md:self-auto">
           {note?.fileUrl && (
             <Image
               src={note.fileUrl}

@@ -35,7 +35,7 @@ export default function Page({
 
   const { user: currentUser } = useUser();
   const isProfileOwner = params.id === currentUser?.id;
-  const { results, status, loadMore } = usePaginatedQuery(api.notes.get.userId, { userId: params.id ? params.id : "skip" }, { initialNumItems: 5 })
+  const { results, status, loadMore } = usePaginatedQuery(api.notes.get.userId, { userId: params.id ? params.id : "skip" }, { initialNumItems: 10 })
 
   const router = useRouter();
 
@@ -155,7 +155,7 @@ export default function Page({
           />
         </div>
       </div>
-      <div className="overflow-y-auto max-h-[26rem] hide-scrollbar">
+      <div className="overflow-y-auto max-h-[40rem] hide-scrollbar">
         {results.map((note) => (
           <Note key={note._id} note={note} />
         ))}

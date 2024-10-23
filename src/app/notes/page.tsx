@@ -12,26 +12,26 @@ export default function Page() {
   const notesRef = useRef<HTMLDivElement | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar toggle state
 
-  const { results: notes, status, loadMore } = usePaginatedQuery(api.notes.get.list, {}, { initialNumItems: 5 });
+  const { results: notes, status, loadMore } = usePaginatedQuery(api.notes.get.list, {}, { initialNumItems: 10 });
   useScroll(notesRef, () => loadMore(5));
 
   return (
     <PageContainer className="relative flex">
       {/* Notes Section */}
-      <div className="flex-1">
+      <div className="flex-1 mx-10">
         <NotesSection />
       </div>
 
       {/* Toggle Button for Sidebar (Only visible on small screens) */}
       <button
-        className="fixed bottom-5 right-5 z-50 p-3 bg-gray-600 text-white rounded-full shadow-lg md:hidden" // Visible only on small screens
+        className="fixed bottom-5 right-5 z-50 p-3 bg-gray-600 text-white rounded-full shadow-lg lg:hidden" // Visible only on small screens
         onClick={() => setIsSidebarOpen(!isSidebarOpen)} // Toggle sidebar
       >
         {isSidebarOpen ? <ChevronLast size={24} /> : <ChevronFirst size={24} />}
       </button>
 
       {/* Sidebar */}
-      <div className={`transition-transform duration-300 hidden md:block w-[275px] flex-shrink-0 border-l stick top-0`}>
+      <div className={`transition-transform duration-300 hidden lg:block w-[300px] flex-shrink-0 stick top-0`}>
         <Sidebar />
       </div>
 
