@@ -10,6 +10,7 @@ import { EllipsisHorizontalIcon, LinkIcon } from "@heroicons/react/24/solid";
 import { StarIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/outline";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
+import Link from "next/link";
 import axios from "axios";
 import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
@@ -21,7 +22,6 @@ import { copyToClipboard } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQuery } from "convex/react";
 import Image from "next/image"
-import { underscoreInputRegex } from "@tiptap/extension-bold";
 
 export default function Page() {
   const router = useRouter();
@@ -55,7 +55,6 @@ export default function Page() {
   const handleFork = async () => {
 
     try {
-
       const noteId = await createNewNote({
         description: note?.description,
         html: note?.html,
@@ -69,7 +68,7 @@ export default function Page() {
         originalId: id ?? undefined
       });
 
-      router.push(`/notes/view?id=${noteId}`);
+      router.push(`/notes/edit?id=${noteId}`);
     } catch (error) {
       console.error("Note creation failed:", error);
     } 
@@ -147,6 +146,13 @@ export default function Page() {
           )}
         </div>
       </div>
+      {note?.originalId && (
+            <div className="text-sm text-blue-600 mb-2 ml-2 hover:underline">
+              <Link href={`/notes/view?id=${note.originalId}`}>
+                Click to view original post
+              </Link>
+            </div>
+          )}
       <div className="flex px-1 py-4 border-y justify-between mb-4">
         <div className="flex gap-4">
           <CustomTooltip
@@ -198,7 +204,7 @@ export default function Page() {
                 <DropdownMenuItem onClick={handleFork}>
                   Fork Note
                 </DropdownMenuItem>
-              {/* )} */}
+              {/* )}  */}
                 <DropdownMenuItem>Download</DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
