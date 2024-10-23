@@ -196,15 +196,15 @@ export default function Page() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuGroup>
-              {/* {isOwner ? (
+              {isOwner ? (
                 <DropdownMenuItem onClick={() => router.push(`/notes/edit?id=${id}`)}>
                   Edit
                 </DropdownMenuItem>
-              ) : ( */}
+              ) : (
                 <DropdownMenuItem onClick={handleFork}>
                   Fork Note
                 </DropdownMenuItem>
-              {/* )}  */}
+              )} 
                 <DropdownMenuItem>Download</DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
