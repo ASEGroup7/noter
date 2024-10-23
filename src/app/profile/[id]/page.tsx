@@ -144,7 +144,7 @@ export default function Page({
         </Dialog>
       </div>
       <div className="flex justify-between items-center border-b pt-2 pb-5">
-        <h1 className="text-3xl font-bold pt-2">My Notes</h1>
+        <h1 className="text-3xl font-bold pt-2">Uploaded Notes</h1>
         <div className="flex justify-end">
           <CustomTooltip
             trigger={

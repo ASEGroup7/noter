@@ -4,6 +4,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from 'next/link'; // Import the Link component from Next.js
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { toPascalCase } from "@/lib/utils";
+import { User } from "@clerk/clerk-sdk-node";
+import axios from "axios";
 
 const Sidebar = () => {
   const router = useRouter(); 
@@ -35,6 +39,7 @@ const Sidebar = () => {
 // Function to render Section 1: Topic of the Day
 const TopicOfTheDay = ({ randomTagNotes }: { randomTagNotes: any[] }) => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [creatorData, setCreatorData] = useState<{ [key: string]: User | null }>({});
 
   // Fetch notes for the selected tag
   const notesForTagQuery = useQuery(
@@ -51,7 +56,7 @@ const TopicOfTheDay = ({ randomTagNotes }: { randomTagNotes: any[] }) => {
     if (randomTagNotes.length > 0) {
       // Collect all unique tags from the notes
       const allTags = randomTagNotes
-        .map(note => note.tags)
+        .map((note) => note.tags)
         .flat() // Flatten the array of arrays
         .filter((tag, index, self) => self.indexOf(tag) === index); // Remove duplicates
 
@@ -64,35 +69,61 @@ const TopicOfTheDay = ({ randomTagNotes }: { randomTagNotes: any[] }) => {
     }
   }, [randomTagNotes]);
 
+  // Fetch creator data for each post
+  useEffect(() => {
+    async function getCreatorData(post: any) {
+      try {
+        const res = await axios.get("/api/user", { params: { id: post.userId } });
+        setCreatorData((prev) => ({
+          ...prev,
+          [post._id]: res.data.user, // Store user data associated with each post's ID
+        }));
+      } catch (e) {
+        console.log("Error fetching creator data", e);
+      }
+    }
+
+    notesForTag.forEach((post) => getCreatorData(post));
+  }, [notesForTag]);
+
   return (
-    <div>
-      <div className="flex items-center mt-8 mb-1">
-        <h2 className="text-sm font-semibold ml-1">Featuring:</h2>
-        <h3 className="text-md font-bold underline ml-1">{selectedTag}</h3>
-      </div>
+    <div className="mb-1">
+      <h2 className="text-md font-semibold ml-1 mb-1">Featuring:</h2>
       
       {notesForTag.length > 0 ? (
         <>
-          {renderPosts(notesForTag)} {/* Render the posts */}
+          {renderPosts(notesForTag, creatorData, selectedTag)} {/* Render the posts */}
         </>
       ) : (
-        <p className="text-gray-500 text-sm font-light ml-6 mb-4">Loading notes for this topic...</p>
+        <p className="text-gray-500 text-sm font-light ml-6 mb-4">
+          Loading notes for this topic...
+        </p>
       )}
     </div>
   );
 };
 
 // Function to render posts
-const renderPosts = (posts: any[]) => {
+const renderPosts = (posts: any[], creatorData: { [key: string]: User | null }, selectedTag: string | null) => {
   return posts.map((post, index) => (
-    <div key={index} className="pb-1">
-      <Link href={`/notes/view?id=${post._id}`} className="block hover:bg-gray-100 p-2 rounded">
-        <h3 className="text-lg font-bold mx-4">{post.title}</h3>
-        <p className="text-gray-500 text-sm font-light mx-4">{post.description}</p>
+    <div key={index} className="">
+      <Link href={`/notes/view?id=${post._id}`} className="block p-2">
+        <div className="flex items-center text-sm">
+          <Avatar className="size-6">
+            <AvatarImage src={creatorData[post._id]?.imageUrl} />
+            <AvatarFallback>{creatorData[post._id]?.username?.[0]}</AvatarFallback>
+          </Avatar>
+          <Link href={`/profile/${creatorData[post._id]?.id}`} className="hover:underline pl-1">
+            {creatorData[post._id]?.username || creatorData[post._id]?.fullName || "Username"}
+          </Link>
+          <span className="text-sm text-muted-foreground ml-1">In {selectedTag}</span>
+        </div>
+        <h3 className="text-md font-bold ml-1 mt-2">{post.title}</h3>
       </Link>
     </div>
   ));
 };
+
 
 const renderRecommendedTopics = (allTags: any[] = [], router: any) => {
   
@@ -105,7 +136,7 @@ const renderRecommendedTopics = (allTags: any[] = [], router: any) => {
 
   return (
     <div>
-  <h2 className="text-sm font-semibold mx-1 my-3">Topics:</h2>
+  <h2 className="text-md font-semibold mx-1 my-3">Topics:</h2>
   <div className="flex flex-wrap gap-2 max-h-80 overflow-y-auto hide-scrollbar"> {/* Custom class to hide scrollbar */}
     {allTags.length !== 0 ? (
       shuffledTags.map((tag) => (
