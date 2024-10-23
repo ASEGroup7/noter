@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Link from 'next/link'; // Import the Link component from Next.js
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { toPascalCase } from "@/lib/utils";
+import { truncateString } from "@/lib/utils";
 import { User } from "@clerk/clerk-sdk-node";
 import axios from "axios";
 
@@ -25,10 +25,10 @@ const Sidebar = () => {
   const allTags = allTagsQuery ?? [];
 
   return (
-    <div className="sticky top-20">
+    <div className="flex flex-col items-start pt-5 gap-y-5 sticky top-20">
       {/* Section 1: Topic of the Day */}
       <TopicOfTheDay randomTagNotes={randomTagNotes} />
-      <div className="border-b border-gray-800"> </div>
+      <div className="border-b w-full"></div>
       {/* Section 2: Recommended Topics */}
       {renderRecommendedTopics(allTags, router)}
     </div>
@@ -87,7 +87,7 @@ const TopicOfTheDay = ({ randomTagNotes }: { randomTagNotes: any[] }) => {
   }, [notesForTag]);
 
   return (
-    <div className="mb-1">
+    <div>
       <h2 className="text-md font-semibold ml-1 mb-1">Featuring:</h2>
       
       {notesForTag.length > 0 ? (
@@ -108,7 +108,7 @@ const renderPosts = (posts: any[], creatorData: { [key: string]: User | null }, 
   return posts.map((post, index) => (
     <div key={index} className="">
       <Link href={`/notes/view?id=${post._id}`} className="block p-2">
-        <div className="flex items-center text-sm">
+        <div className="flex items-center gap-x-1 text-sm">
           <Avatar className="size-6">
             <AvatarImage src={creatorData[post._id]?.imageUrl} />
             <AvatarFallback>{creatorData[post._id]?.username?.[0]}</AvatarFallback>
@@ -116,7 +116,7 @@ const renderPosts = (posts: any[], creatorData: { [key: string]: User | null }, 
           <Link href={`/profile/${creatorData[post._id]?.id}`} className="hover:underline pl-1">
             {creatorData[post._id]?.username || creatorData[post._id]?.fullName || "Username"}
           </Link>
-          <span className="text-sm text-muted-foreground ml-1">In {selectedTag}</span>
+          <span className="text-sm text-muted-foreground">In {truncateString(selectedTag|| "", 18)}</span>
         </div>
         <h3 className="text-md font-bold ml-1 mt-2">{post.title}</h3>
       </Link>
@@ -132,17 +132,17 @@ const renderRecommendedTopics = (allTags: any[] = [], router: any) => {
   };
 
   // Shuffle the allTags array
-  const shuffledTags = [...allTags].sort(() => 0.5 - Math.random());
+  const shuffledTags = [...allTags].sort(() => 0.5 - Math.random()).slice(0,20);
 
   return (
     <div>
-  <h2 className="text-md font-semibold mx-1 my-3">Topics:</h2>
-  <div className="flex flex-wrap gap-2 max-h-80 overflow-y-auto hide-scrollbar"> {/* Custom class to hide scrollbar */}
+  <h2 className="text-md font-semibold mx-1 pb-2">Topics:</h2>
+  <div className="flex flex-wrap gap-2"> {/* Custom class to hide scrollbar */}
     {allTags.length !== 0 ? (
       shuffledTags.map((tag) => (
         <div
           key={tag._id}
-          className="cursor-pointer mx-2"
+          className="cursor-pointer"
           onClick={() => handleTagClick(tag.tag)}
         >
           <Badge className="bg-destructive text-primary bg-gray-200" key={tag}>

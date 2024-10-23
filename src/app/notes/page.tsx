@@ -31,7 +31,7 @@ export default function Page() {
       </button>
 
       {/* Sidebar */}
-      <div className={`transition-transform duration-300 hidden lg:block w-[300px] flex-shrink-0 stick top-0`}>
+      <div className={`transition-transform duration-300 hidden lg:block w-[300px] flex-shrink-0 sticky top-0`}>
         <Sidebar />
       </div>
 
