@@ -3,7 +3,7 @@ import FileHandler from "@tiptap-pro/extension-file-handler";
 
 // TODO : We need to check if the file is local. if it is, upload it and store the url, else, ignore.
 export default FileHandler.configure({
-  allowedMimeTypes: ["images/png", "image,/jpeg", "image/gif", "image/webp"],
+  allowedMimeTypes: ["image/png", "image/jpeg", "image/gif", "image/webp", "image/jpg"],
   onDrop: (currentEditor, files, pos) => {
     files.forEach(file => {
       const fileReader = new FileReader();

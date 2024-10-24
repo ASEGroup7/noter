@@ -1,7 +1,5 @@
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Form, FormControl, FormField, FormLabel, FormMessage, FormItem } from "@/components/ui/form";
 
@@ -106,41 +104,6 @@ export default function EditForm(props: EditFormProps) {
               <FormControl>
                 <Input
                   placeholder={user.user?.username || user.user?.fullName || ""}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-bold">Email</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder={user.user?.primaryEmailAddress?.emailAddress}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-bold">Bio</FormLabel>
-              <FormControl>
-                <Textarea
-                  className="resize-none h-[100px]"
-                  placeholder="A short description about you"
                   {...field}
                 />
               </FormControl>
