@@ -1,25 +1,43 @@
 "use client";
 import PageContainer from "@/components/layout/page-container";
+import NoteSkeleton from "@/components/common/note-skeleton";
 import Sidebar from "./_components/sidebarPanel"; // Your sidebar component
 import NotesSection from "./_components/notessection"; // Main content component
 import { useRef, useState } from "react";
 import { api } from "@convex/api";
 import { usePaginatedQuery } from "convex/react";
-import { useScroll } from "@/components/hooks/useScroll";
+
 import { ChevronFirst, ChevronLast } from 'lucide-react';
 
 export default function Page() {
   const notesRef = useRef<HTMLDivElement | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar toggle state
 
-  const { results: notes, status, loadMore } = usePaginatedQuery(api.notes.get.list, {}, { initialNumItems: 10 });
-  useScroll(notesRef, () => loadMore(5));
+  const { results: notes, status, loadMore } = usePaginatedQuery(api.notes.get.list, {}, { initialNumItems: 5 });
 
+	function handleScroll(e: React.UIEvent<HTMLDivElement>) { //Load more chats when user scrolls to the bottom
+		const bottom = e.currentTarget.scrollHeight - e.currentTarget.scrollTop === e.currentTarget.clientHeight;
+		if(bottom && status === "CanLoadMore") loadMore(3);
+	}
+        
   return (
     <PageContainer className="relative flex">
       {/* Notes Section */}
-      <div className="flex-1 mx-10">
-        <NotesSection />
+      <div 
+        ref={notesRef}
+        className="flex-1 h-[90vh] flex flex-col overflow-y-auto no-scrollbar"
+        onScroll={handleScroll}
+      >
+        {status === "LoadingFirstPage" ? (
+          <>
+            <NoteSkeleton />
+            <NoteSkeleton />
+            <NoteSkeleton />
+          </>
+        ) : null}
+        {notes.map((note) => (
+          <Note key={note._id} note={note} />
+        ))}
       </div>
 
       {/* Toggle Button for Sidebar (Only visible on small screens) */}

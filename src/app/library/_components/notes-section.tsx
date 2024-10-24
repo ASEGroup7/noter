@@ -3,11 +3,10 @@
 import Note from "@/components/common/note";
 import NoteSkeleton from "@/components/common/note-skeleton";
 
+import { Id } from "@convex/dataModel";
 import { cn } from "@/lib/utils";
 import { api } from "@convex/api";
-import { useRef } from "react";
-import { usePaginatedQuery } from "convex/react";
-import { useScroll } from "@/components/hooks/useScroll";
+import { useQuery } from "convex/react";
 
 export default function NotesSection({ 
   className,
@@ -17,37 +16,17 @@ export default function NotesSection({
   starredFileId: string[];
 }) {
 
-  const notesRef = useRef<HTMLDivElement | null>(null);
-  const {
-    results: notes,
-    status,
-    loadMore,
-  } = usePaginatedQuery(api.notes.get.list, {
-    fileId: starredFileId
-  }, { initialNumItems: 5 });
-
-  useScroll(notesRef, () => loadMore(5));
+  const notes = useQuery(api.notes.get.idList, { fileIds: starredFileId as Id<"notes">[] });
 
   return (
-    <div
-      ref={notesRef}
-      className={cn(
-        className,
-        "flex-1 flex flex-col overflow-y-auto no-scrollbar"
-      )}
-    >
-      {status === "LoadingFirstPage" ? (
-        <>
+    <div>
+      {
+        notes ? notes.map((note) => <Note key={note._id} note={note} />) : <>
           <NoteSkeleton />
           <NoteSkeleton />
           <NoteSkeleton />
         </>
-      ) : null}
-      {notes.map((note) => (
-        // <Note key={note._id} {...note} />
-        <Note key={note._id} note={note} />
-      ))}
-      
+      }
     </div>
   );
 }
