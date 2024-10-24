@@ -21,11 +21,15 @@ export default function NotesSection({
   return (
     <div>
       {
-        notes ? notes.map((note) => <Note key={note._id} note={note} />) : <>
-          <NoteSkeleton />
-          <NoteSkeleton />
-          <NoteSkeleton />
-        </>
+        notes?.map((note) => 
+          note ? <Note key={note._id} note={note} /> : null
+        ) ?? (
+          <>
+            <NoteSkeleton />
+            <NoteSkeleton />
+            <NoteSkeleton />
+          </>
+        )
       }
     </div>
   );
