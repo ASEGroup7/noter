@@ -94,15 +94,9 @@ export function MenuBar({ editor }: { editor: Editor | null }) {
 
   return (
     <>
-      <ToggleGroup type="multiple" className="flex flex-wrap gap-1 mt-2 mb-2 ">
-        {/* Heading and Font Family */}
-        <div>
-          <Heading editor={editor} />
-        </div>
-
-        <div>
-          <FontFamilyPicker editor={editor} />
-        </div>
+      <ToggleGroup type="multiple" className="flex flex-wrap gap-1 mt-5 mb-2 ">
+        <Heading editor={editor} />
+        <FontFamilyPicker editor={editor} />
 
         {/* Render ToggleGroupItems */}
         {toggleGroupItems.map((item) => (
@@ -139,10 +133,7 @@ export function MenuBar({ editor }: { editor: Editor | null }) {
         {/* Text Alignment and Table Grid Selector */}
         <TextAlignPicker editor={editor} />
         
-        <div> 
-          <MarkdownShortcutsDialog />
-        </div>
-        
+        <MarkdownShortcutsDialog />
       </ToggleGroup>
     </>
   );

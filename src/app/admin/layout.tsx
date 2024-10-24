@@ -14,6 +14,10 @@ const items = [
     title: "Notes",
     href: "/admin/notes",
   },
+  {
+    title: "Tags",
+    href: "/admin/tags",
+  },
 ]
 
 export default function AdminLayout({
