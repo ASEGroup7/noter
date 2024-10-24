@@ -60,7 +60,7 @@ export function Navbar() {
             <DropdownMenuContent className="w-[200px] translate-x-[-10px]">
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <DropdownMenuItemLink href="/upload" onClick={() => setIsDropdownOpen(false)}>
+                  <DropdownMenuItemLink href="/notes/upload" onClick={() => setIsDropdownOpen(false)}>
                     <Plus className="size-4" />
                     <span>Create Note</span>
                   </DropdownMenuItemLink>
@@ -120,7 +120,7 @@ export function Navbar() {
 
                 {/* Add elements here. */}
                 <div className="flex-1 flex flex-col gap-4 justify-center">
-                  <Link href="/upload" className="flex items-center gap-2" onClick={() => setIsSheetOpen(false)}>
+                  <Link href="/notes/upload" className="flex items-center gap-2" onClick={() => setIsSheetOpen(false)}>
                     <Plus className="size-5" />
                     <span>Create Note</span>
                   </Link>
