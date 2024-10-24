@@ -96,7 +96,7 @@ const ExtensionHandler = [
   TaskList, // added
   NodeRange,
   UniqueID,
-  FileHandler,
+  // FileHandler,
 ];
 
 export default ExtensionHandler;

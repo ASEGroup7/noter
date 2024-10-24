@@ -115,6 +115,13 @@ export default function Page() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    if (note?.downloads !== undefined) {
+      updateNotesMutation({
+        id: note._id,
+        downloads: note.downloads + 1,
+      });
+    }
   };
 
   function handleDelete() {
