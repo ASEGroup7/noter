@@ -108,6 +108,15 @@ export default function Page() {
     }
   };
   
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = `/pdfs/${note?.title}.pdf`; // Replace with your file path (in /public folder)
+    link.download = `${note?.title}.pdf`; // Optional: name of the downloaded file
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   function handleDelete() {
     deleteNote({ id: id as Id<"notes"> });
     router.push("/notes");
@@ -205,7 +214,9 @@ export default function Page() {
                   Fork Note
                 </DropdownMenuItem>
               )} 
-                <DropdownMenuItem>Download</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleDownload}>
+                  Download
+                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               {isOwner ? (
@@ -221,6 +232,7 @@ export default function Page() {
           </DropdownMenu>
         </div>
       </div>
+      
       {/* Here we display the sanitized HTML */}
       <div className="flex flex-col">
         {

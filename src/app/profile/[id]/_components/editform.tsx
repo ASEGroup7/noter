@@ -1,7 +1,6 @@
-import Image from "next/image";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Form, FormControl, FormField, FormLabel, FormMessage, FormItem } from "@/components/ui/form";
 
