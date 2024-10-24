@@ -114,41 +114,6 @@ export default function EditForm(props: EditFormProps) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-bold">Email</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder={user.user?.primaryEmailAddress?.emailAddress}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-bold">Bio</FormLabel>
-              <FormControl>
-                <Textarea
-                  className="resize-none h-[100px]"
-                  placeholder="A short description about you"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <Button type="submit" variant="default">
           Save
         </Button>
