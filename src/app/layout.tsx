@@ -39,7 +39,7 @@ export default function RootLayout({
             <SearchContextProvider>
               <TooltipProvider>
                 <Navbar />
-                <div className="pt-[4.5rem]">
+                <div className="flex-1 flex pt-[4.5rem]">
                   {children}
                 </div>
                 <Toaster />
