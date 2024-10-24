@@ -17,7 +17,7 @@ export default function Home() {
     // 122px because navbar and footer are 60px tall each and with a border of 1.
     <div className="flex-1 relative mx-[5%] h-[80vh] flex flex-col items-left justify-center">
       <h1 className="text-7xl font-bold">Open sourced</h1>
-      <h1 className="text-7xl font-bold">Colaborative</h1>
+      <h1 className="text-7xl font-bold">Collaborative</h1>
       <h1 className="text-7xl font-bold">Notes</h1>
       <Link href="/notes" className={cn(
         buttonVariants({variant: "default"}),
