@@ -25,13 +25,13 @@ export const list = query({
 
 export const idList = query({
   args: {
-    fileIds: v.array(v.id("notes"))
+    fileIds: v.array(v.string())
   },
   handler: async (ctx, args) => {
     const documents = await Promise.all(
       args.fileIds.map(async (id) => {
         if(!ctx.db.normalizeId("notes", id)) return null;
-        return await ctx.db.get(id);
+        return await ctx.db.get(id as Id<"notes">);
       })
     );
     
