@@ -2,8 +2,8 @@
 
 import PageContainer from "@/components/layout/page-container";
 
-import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import NotesSection from "./_components/notes-section";
 
 export default function Page() {
@@ -17,12 +17,13 @@ export default function Page() {
 
   return(
     <PageContainer>
-      <div className="flex items-center gap-4 py-10 border-b">
+      <div className="flex items-center gap-4 py-14 border-b">
         <h1 className="text-4xl font-bold">Liked Notes</h1>
       </div>
-      <div>
+      <div className="pt-5">
         <NotesSection starredFileId={user.user?.publicMetadata.starredFileId as Array<string>}/>
       </div>
+
     </PageContainer>
   )
 }

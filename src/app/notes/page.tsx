@@ -2,7 +2,7 @@
 import PageContainer from "@/components/layout/page-container";
 import NoteSkeleton from "@/components/common/note-skeleton";
 import Sidebar from "./_components/sidebarPanel"; // Your sidebar component
-import NotesSection from "./_components/notessection"; // Main content component
+import Note from "@/components/common/note";
 import { useRef, useState } from "react";
 import { api } from "@convex/api";
 import { usePaginatedQuery } from "convex/react";
