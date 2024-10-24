@@ -8,11 +8,14 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { EllipsisHorizontalIcon, LinkIcon, PencilIcon } from "@heroicons/react/24/solid";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import CustomTooltip from "@/components/common/custom-tooltip";
+import { PlusIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 import axios from "axios";
 import { api } from "@convex/api";
 import { format } from "date-fns";
-import { useUser } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
 import { User } from "@clerk/clerk-sdk-node";
 import { usePaginatedQuery } from "convex/react";
@@ -31,7 +34,13 @@ export default function Page({
 
   const { user: currentUser } = useUser();
   const isProfileOwner = params.id === currentUser?.id;
-  const { results, status, loadMore } = usePaginatedQuery(api.notes.get.userId, { userId: params.id ? params.id : "skip" }, { initialNumItems: 5 })
+  const { results, status, loadMore } = usePaginatedQuery(api.notes.get.userId, { userId: params.id ? params.id : "skip" }, { initialNumItems: 10 })
+
+  const router = useRouter();
+
+  const user = useUser();
+
+  if(user.isLoaded && !user.isSignedIn) router.push("/");
 
   if (!params.id) notFound();
 
@@ -135,6 +144,18 @@ export default function Page({
             <EditForm />
           </DialogContent>
         </Dialog>
+      </div>
+      <div className="flex justify-between items-center border-b pt-2 pb-5">
+        <h1 className="text-3xl font-bold pt-2">Uploaded Notes</h1>
+        <div className="flex justify-end">
+          <CustomTooltip
+            trigger={
+              <PlusIcon className="size-10 pt-3 hover:cursor-pointer fill-slate-600 hover:fill-black transition-all" />
+            }
+            content="New note"
+            onClick={() => router.push("/notes/upload")}
+          />
+        </div>
       </div>
       <div 
         ref={notesRef}

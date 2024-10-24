@@ -15,9 +15,10 @@ export const create = mutation({
     tags: v.optional(v.array(v.string())),
     title: v.optional(v.string()),
     userId: v.optional(v.string()),
+    originalId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const { description, downloads, fileId, fileUrl, html, stars, tags, title, userId } = args;
+    const { description, downloads, fileId, fileUrl, html, stars, tags, title, userId, originalId } = args;
 
     const newNoteId = await ctx.db.insert("notes", {
       description: description || "",
@@ -30,6 +31,7 @@ export const create = mutation({
       tags: tags || [],
       title: title || "",
       userId: userId || "",
+      originalId: originalId || undefined
     })
 
     return newNoteId;
