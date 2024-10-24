@@ -25,7 +25,7 @@ export const create = mutation({
       downloads: downloads || 0,
       fileId: fileId || "",
       fileUrl: fileUrl || "",
-      fulltext: description + " " + title + " " + tags,
+      fulltext: title + " " +  description + " " + (tags ? tags.join(" ") : ""),
       html: html || "",
       stars: stars || 0,
       tags: tags || [],

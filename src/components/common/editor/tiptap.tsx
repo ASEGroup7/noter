@@ -67,7 +67,7 @@ export default function Tiptap({
 
   return (
     <>
-      <div className="mx-3">
+      <div className="mx-3 min-h-[89vh]">
         {/* Pass the editor instance to MenuBar */}
         { editable ? <MenuBar editor={editor} /> : null }
         <EditorContent editor={editor} onKeyDown={handleKeyDown} />
