@@ -38,7 +38,7 @@ export default function Page() {
         ))}
       </div>
 
-      <Sidebar className="w-0 lg:w-full"/>
+      <Sidebar className="hidden lg:block lg:sticky"/>
 
     </PageContainer>
   );
