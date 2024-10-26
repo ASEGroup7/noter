@@ -21,7 +21,7 @@ describe('upload note', () => {
       cy.wait(10000);
     })
 
-    it('goes to notes page', () => {
+    it('newly uploaded note shows up in the main page', () => {
       cy.wait(5000);
       cy.visit('http://localhost:3000/notes')
 

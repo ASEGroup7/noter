@@ -1,0 +1,39 @@
+name: Cypress Tests
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  jest_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Run Cypress Tests
+        id: run_cypress_tests
+        continue-on-error: true
+        run: |
+          set +e
+          npx cypress run 
+          exit_code=$?  # Capture exit code of the Jest command
+          echo "CYPRESS_EXIT_CODE=$exit_code" >> $GITHUB_ENV
+      - name: Check Cypress Test Exit Code
+        run: |
+          exit_code=${{ env.CYPRESS_EXIT_CODE }}  # Use the exit code saved in the environment
+          echo "Exit code of Cypress tests: $exit_code"
+          
+          if [ $exit_code -ne 0 ]; then
+            echo "Tests failed with exit code $exit_code"
+            exit $exit_code  # This will fail the workflow
+          fi
