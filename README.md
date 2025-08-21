@@ -22,4 +22,4 @@ Noter is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-nex
 
 ## Getting Started
 
-The best way to use Noter is the hosted copy at https://noter.shunjieyong.dev/
+The best way to use Noter is the hosted copy at ~~https://noter.shunjieyong.dev/~~ [deprecated]
